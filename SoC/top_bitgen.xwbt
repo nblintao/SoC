@@ -1,0 +1,8 @@
+INTSTYLE=ise
+INFILE=D:\SoC\SoC\top.ncd
+OUTFILE=D:\SoC\SoC\top.bit
+FAMILY=Spartan6
+PART=xc6slx16-3csg324
+WORKINGDIR=D:\SoC\SoC
+LICENSE=WebPack
+USER_INFO=0_0_0
