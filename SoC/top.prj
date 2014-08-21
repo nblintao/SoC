@@ -1,1 +1,4 @@
+verilog work "multiple_cycle_cpu.v"
+verilog work "clk_div.v"
+verilog work "BTN_Anti.v"
 verilog work "top.v"

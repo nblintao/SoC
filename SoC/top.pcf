@@ -1,5 +1,5 @@
 //! **************************************************************************
-// Written by: Map M.81d on Thu Aug 21 15:34:06 2014
+// Written by: Map M.81d on Thu Aug 21 21:08:21 2014
 //! **************************************************************************
 
 SCHEMATIC START;
@@ -10,12 +10,12 @@ COMP "Led<5>" LOCATE = SITE "N11" LEVEL 1;
 COMP "an<1>" LOCATE = SITE "N15" LEVEL 1;
 COMP "Led<6>" LOCATE = SITE "R11" LEVEL 1;
 COMP "an<2>" LOCATE = SITE "P18" LEVEL 1;
-COMP "btn<0>" LOCATE = SITE "B8" LEVEL 1;
 COMP "Led<7>" LOCATE = SITE "T11" LEVEL 1;
 COMP "an<3>" LOCATE = SITE "P17" LEVEL 1;
+COMP "btn<0>" LOCATE = SITE "B8" LEVEL 1;
 COMP "btn<1>" LOCATE = SITE "A8" LEVEL 1;
-COMP "clk" LOCATE = SITE "V10" LEVEL 1;
 COMP "btn<2>" LOCATE = SITE "C4" LEVEL 1;
+COMP "clk" LOCATE = SITE "V10" LEVEL 1;
 COMP "btn<3>" LOCATE = SITE "C9" LEVEL 1;
 COMP "btn<4>" LOCATE = SITE "D9" LEVEL 1;
 COMP "seg<0>" LOCATE = SITE "T17" LEVEL 1;
@@ -37,5 +37,15 @@ COMP "sw<7>" LOCATE = SITE "T5" LEVEL 1;
 COMP "Led<0>" LOCATE = SITE "U16" LEVEL 1;
 COMP "Led<1>" LOCATE = SITE "V16" LEVEL 1;
 COMP "Led<2>" LOCATE = SITE "U15" LEVEL 1;
+TIMEGRP sys_clk_pin = BEL "M2/clkdiv_0" BEL "M2/clkdiv_1" BEL "M2/clkdiv_2"
+        BEL "M2/clkdiv_3" BEL "M2/clkdiv_4" BEL "M2/clkdiv_5" BEL
+        "M2/clkdiv_6" BEL "M2/clkdiv_7" BEL "M2/clkdiv_8" BEL "M2/clkdiv_9"
+        BEL "M2/clkdiv_10" BEL "M2/clkdiv_11" BEL "M2/clkdiv_12" BEL
+        "M2/clkdiv_13" BEL "M2/clkdiv_14" BEL "M2/clkdiv_15" BEL
+        "M2/clkdiv_16" BEL "M2/clkdiv_17" BEL "M2/clkdiv_18" BEL
+        "M2/clkdiv_19" BEL "M2/clkdiv_20" BEL "M2/clkdiv_21" BEL
+        "M2/clkdiv_22" BEL "M1/keydirection" BEL "M1/button_out_0" BEL
+        "clk_BUFGP/BUFG";
+TS_sys_clk_pin = PERIOD TIMEGRP "sys_clk_pin" 100 MHz HIGH 50%;
 SCHEMATIC END;
 

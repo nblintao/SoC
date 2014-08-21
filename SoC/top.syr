@@ -3,14 +3,14 @@ Copyright (c) 1995-2010 Xilinx, Inc.  All rights reserved.
 --> Parameter TMPDIR set to xst/projnav.tmp
 
 
-Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.10 secs
+Total REAL time to Xst completion: 1.00 secs
+Total CPU time to Xst completion: 0.11 secs
  
 --> Parameter xsthdpdir set to xst
 
 
-Total REAL time to Xst completion: 0.00 secs
-Total CPU time to Xst completion: 0.10 secs
+Total REAL time to Xst completion: 1.00 secs
+Total CPU time to Xst completion: 0.11 secs
  
 --> Reading design: top.prj
 
@@ -106,6 +106,12 @@ Slice Utilization Ratio Delta      : 5
 =========================================================================
 *                          HDL Parsing                                  *
 =========================================================================
+Analyzing Verilog file \"\SoC\SoC\multiple_cycle_cpu.v\" into library work
+Parsing module <multiple_cycle_cpu>.
+Analyzing Verilog file \"\SoC\SoC\clk_div.v\" into library work
+Parsing module <clk_div>.
+Analyzing Verilog file \"\SoC\SoC\BTN_Anti.v\" into library work
+Parsing module <BTN_Anti>.
 Analyzing Verilog file \"\SoC\SoC\top.v\" into library work
 Parsing module <top>.
 
@@ -114,6 +120,28 @@ Parsing module <top>.
 =========================================================================
 
 Elaborating module <top>.
+WARNING:HDLCompiler:872 - "\SoC\SoC\top.v" Line 32: Using initial value of resetn since it is never assigned
+
+Elaborating module <BTN_Anti>.
+WARNING:HDLCompiler:413 - "\SoC\SoC\BTN_Anti.v" Line 40: Result of 5-bit expression is truncated to fit in 4-bit target.
+WARNING:HDLCompiler:1127 - "\SoC\SoC\BTN_Anti.v" Line 36: Assignment to direct ignored, since the identifier is never used
+WARNING:HDLCompiler:413 - "\SoC\SoC\BTN_Anti.v" Line 51: Result of 5-bit expression is truncated to fit in 4-bit target.
+WARNING:HDLCompiler:1127 - "\SoC\SoC\BTN_Anti.v" Line 46: Assignment to direct ignored, since the identifier is never used
+
+Elaborating module <clk_div>.
+WARNING:HDLCompiler:189 - "\SoC\SoC\top.v" Line 42: Size mismatch in connection of port <rst>. Formal port size is 1-bit while actual signal size is 32-bit.
+
+Elaborating module <multiple_cycle_cpu>.
+WARNING:HDLCompiler:413 - "\SoC\SoC\multiple_cycle_cpu.v" Line 145: Result of 3-bit expression is truncated to fit in 1-bit target.
+WARNING:HDLCompiler:413 - "\SoC\SoC\multiple_cycle_cpu.v" Line 147: Result of 3-bit expression is truncated to fit in 1-bit target.
+WARNING:HDLCompiler:413 - "\SoC\SoC\multiple_cycle_cpu.v" Line 148: Result of 3-bit expression is truncated to fit in 1-bit target.
+WARNING:HDLCompiler:413 - "\SoC\SoC\multiple_cycle_cpu.v" Line 149: Result of 3-bit expression is truncated to fit in 1-bit target.
+WARNING:HDLCompiler:1127 - "\SoC\SoC\multiple_cycle_cpu.v" Line 164: Assignment to wmem ignored, since the identifier is never used
+WARNING:HDLCompiler:1127 - "\SoC\SoC\top.v" Line 43: Assignment to m_addr ignored, since the identifier is never used
+WARNING:HDLCompiler:413 - "\SoC\SoC\top.v" Line 47: Result of 9-bit expression is truncated to fit in 8-bit target.
+WARNING:HDLCompiler:634 - "\SoC\SoC\top.v" Line 37: Net <d_f_mem[31]> does not have a driver.
+WARNING:HDLCompiler:552 - "\SoC\SoC\top.v" Line 41: Input port SW[7] is not connected on this instance
+WARNING:Xst:2972 - "/soc/soc/top.v" line 43. All outputs of instance <M3> of block <multiple_cycle_cpu> are unconnected in block <top>. Underlying logic will be removed.
 
 =========================================================================
 *                           HDL Synthesis                               *
@@ -121,27 +149,93 @@ Elaborating module <top>.
 
 Synthesizing Unit <top>.
     Related source file is "/soc/soc/top.v".
-WARNING:Xst:647 - Input <btn<4:0>> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
-WARNING:Xst:647 - Input <clk> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:2898 - Port 'SW', unconnected in block instance 'M1', is tied to GND.
+WARNING:Xst:647 - Input <sw<7:3>> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:647 - Input <sw<1:0>> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+INFO:Xst:3010 - "/soc/soc/top.v" line 41: Output port <SW_OK> of the instance <M1> is unconnected or connected to loadless signal.
+INFO:Xst:3010 - "/soc/soc/top.v" line 43: Output port <m_addr> of the instance <M3> is unconnected or connected to loadless signal.
+INFO:Xst:3010 - "/soc/soc/top.v" line 43: Output port <d_t_mem> of the instance <M3> is unconnected or connected to loadless signal.
+INFO:Xst:3010 - "/soc/soc/top.v" line 43: Output port <state> of the instance <M3> is unconnected or connected to loadless signal.
+INFO:Xst:3010 - "/soc/soc/top.v" line 43: Output port <w_d_mem> of the instance <M3> is unconnected or connected to loadless signal.
+INFO:Xst:3010 - "/soc/soc/top.v" line 43: Output port <wr_vram> of the instance <M3> is unconnected or connected to loadless signal.
+INFO:Xst:3010 - "/soc/soc/top.v" line 43: Output port <rd_vram> of the instance <M3> is unconnected or connected to loadless signal.
+INFO:Xst:3010 - "/soc/soc/top.v" line 43: Output port <io_rdn> of the instance <M3> is unconnected or connected to loadless signal.
+WARNING:Xst:653 - Signal <d_f_mem> is used but never assigned. This sourceless signal will be automatically connected to value GND.
+    Found 8-bit register for signal <Led>.
+    Found 8-bit adder for signal <num[7]_GND_1_o_add_3_OUT> created at line 47.
     Summary:
-	no macro.
+	inferred   1 Adder/Subtractor(s).
+	inferred   8 D-type flip-flop(s).
 Unit <top> synthesized.
+
+Synthesizing Unit <BTN_Anti>.
+    Related source file is "/soc/soc/btn_anti.v".
+        COUNTER = 32
+        num = 22
+WARNING:Xst:647 - Input <clkdiv<31:23>> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:647 - Input <clkdiv<19:0>> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:647 - Input <SW<7:0>> is never used. This port will be preserved and left unconnected if it belongs to a top-level block or it belongs to a sub-block and the hierarchy of this sub-block is preserved.
+WARNING:Xst:653 - Signal <SW_OK> is used but never assigned. This sourceless signal will be automatically connected to value GND.
+    Found 5-bit register for signal <button_out>.
+    Found 1-bit register for signal <keydirection>.
+    Summary:
+	inferred   6 D-type flip-flop(s).
+Unit <BTN_Anti> synthesized.
+
+Synthesizing Unit <clk_div>.
+    Related source file is "/soc/soc/clk_div.v".
+    Found 32-bit register for signal <clkdiv>.
+    Found 32-bit adder for signal <clkdiv[31]_GND_3_o_mux_2_OUT> created at line 35.
+    Summary:
+	inferred   1 Adder/Subtractor(s).
+	inferred  32 D-type flip-flop(s).
+	inferred   1 Multiplexer(s).
+Unit <clk_div> synthesized.
 
 =========================================================================
 HDL Synthesis Report
 
-Found no macro
+Macro Statistics
+# Adders/Subtractors                                   : 2
+ 32-bit adder                                          : 1
+ 8-bit adder                                           : 1
+# Registers                                            : 4
+ 1-bit register                                        : 1
+ 32-bit register                                       : 1
+ 5-bit register                                        : 1
+ 8-bit register                                        : 1
+# Multiplexers                                         : 1
+ 1-bit 2-to-1 multiplexer                              : 1
+
 =========================================================================
 
 =========================================================================
 *                       Advanced HDL Synthesis                          *
 =========================================================================
 
+WARNING:Xst:2677 - Node <button_out_1> of sequential type is unconnected in block <M1>.
+WARNING:Xst:2677 - Node <button_out_2> of sequential type is unconnected in block <M1>.
+WARNING:Xst:2677 - Node <button_out_3> of sequential type is unconnected in block <M1>.
+WARNING:Xst:2677 - Node <button_out_4> of sequential type is unconnected in block <M1>.
+
+Synthesizing (advanced) Unit <clk_div>.
+The following registers are absorbed into counter <clkdiv>: 1 register on signal <clkdiv>.
+Unit <clk_div> synthesized (advanced).
+
+Synthesizing (advanced) Unit <top>.
+The following registers are absorbed into counter <num>: 1 register on signal <num>.
+Unit <top> synthesized (advanced).
 
 =========================================================================
 Advanced HDL Synthesis Report
 
-Found no macro
+Macro Statistics
+# Counters                                             : 2
+ 32-bit up counter                                     : 1
+ 8-bit up counter                                      : 1
+# Registers                                            : 6
+ Flip-Flops                                            : 6
+
 =========================================================================
 
 =========================================================================
@@ -149,6 +243,21 @@ Found no macro
 =========================================================================
 
 Optimizing unit <top> ...
+
+Optimizing unit <BTN_Anti> ...
+WARNING:Xst:2677 - Node <M2/clkdiv_23> of sequential type is unconnected in block <top>.
+WARNING:Xst:2677 - Node <M2/clkdiv_24> of sequential type is unconnected in block <top>.
+WARNING:Xst:2677 - Node <M2/clkdiv_25> of sequential type is unconnected in block <top>.
+WARNING:Xst:2677 - Node <M2/clkdiv_26> of sequential type is unconnected in block <top>.
+WARNING:Xst:2677 - Node <M2/clkdiv_27> of sequential type is unconnected in block <top>.
+WARNING:Xst:2677 - Node <M2/clkdiv_28> of sequential type is unconnected in block <top>.
+WARNING:Xst:2677 - Node <M2/clkdiv_29> of sequential type is unconnected in block <top>.
+WARNING:Xst:2677 - Node <M2/clkdiv_30> of sequential type is unconnected in block <top>.
+WARNING:Xst:2677 - Node <M2/clkdiv_31> of sequential type is unconnected in block <top>.
+WARNING:Xst:2677 - Node <M1/button_out_4> of sequential type is unconnected in block <top>.
+WARNING:Xst:2677 - Node <M1/button_out_3> of sequential type is unconnected in block <top>.
+WARNING:Xst:2677 - Node <M1/button_out_2> of sequential type is unconnected in block <top>.
+WARNING:Xst:2677 - Node <M1/button_out_1> of sequential type is unconnected in block <top>.
 
 Mapping all equations...
 Building and optimizing final netlist ...
@@ -159,7 +268,10 @@ Final Macro Processing ...
 =========================================================================
 Final Register Report
 
-Found no macro
+Macro Statistics
+# Registers                                            : 33
+ Flip-Flops                                            : 33
+
 =========================================================================
 
 =========================================================================
@@ -181,10 +293,22 @@ Top Level Output File Name         : top.ngc
 
 Primitive and Black Box Usage:
 ------------------------------
-# BELS                             : 1
+# BELS                             : 97
 #      GND                         : 1
-# IO Buffers                       : 28
-#      IBUF                        : 8
+#      INV                         : 2
+#      LUT1                        : 29
+#      LUT5                        : 2
+#      LUT6                        : 2
+#      MUXCY                       : 29
+#      VCC                         : 1
+#      XORCY                       : 31
+# FlipFlops/Latches                : 33
+#      FD                          : 32
+#      FD_1                        : 1
+# Clock Buffers                    : 1
+#      BUFGP                       : 1
+# IO Buffers                       : 25
+#      IBUF                        : 5
 #      OBUF                        : 20
 
 Device utilization summary:
@@ -194,19 +318,23 @@ Selected Device : 6slx16csg324-3
 
 
 Slice Logic Utilization: 
+ Number of Slice Registers:              33  out of  18224     0%  
+ Number of Slice LUTs:                   35  out of   9112     0%  
+    Number used as Logic:                35  out of   9112     0%  
 
 Slice Logic Distribution: 
- Number of LUT Flip Flop pairs used:      0
-   Number with an unused Flip Flop:       0  out of      0         
-   Number with an unused LUT:             0  out of      0         
-   Number of fully used LUT-FF pairs:     0  out of      0         
-   Number of unique control sets:         0
+ Number of LUT Flip Flop pairs used:     35
+   Number with an unused Flip Flop:       2  out of     35     5%  
+   Number with an unused LUT:             0  out of     35     0%  
+   Number of fully used LUT-FF pairs:    33  out of     35    94%  
+   Number of unique control sets:         2
 
 IO Utilization: 
  Number of IOs:                          34
- Number of bonded IOBs:                  28  out of    232    12%  
+ Number of bonded IOBs:                  26  out of    232    11%  
 
 Specific Feature Utilization:
+ Number of BUFG/BUFGCTRLs:                1  out of     16     6%  
 
 ---------------------------
 Partition Resource Summary:
@@ -226,7 +354,13 @@ NOTE: THESE TIMING NUMBERS ARE ONLY A SYNTHESIS ESTIMATE.
 
 Clock Information:
 ------------------
-No clock signals found in this design
+-----------------------------------+------------------------+-------+
+Clock Signal                       | Clock buffer(FF name)  | Load  |
+-----------------------------------+------------------------+-------+
+clk                                | BUFGP                  | 25    |
+M1/button_out_0                    | NONE(num_0)            | 8     |
+-----------------------------------+------------------------+-------+
+INFO:Xst:2169 - HDL ADVISOR - Some clock signals were not automatically buffered by XST with BUFG/BUFR resources. Please use the buffer_type constraint in order to insert these buffers to the clock signals to help prevent skew problems.
 
 Asynchronous Control Signals Information:
 ----------------------------------------
@@ -236,49 +370,139 @@ Timing Summary:
 ---------------
 Speed Grade: -3
 
-   Minimum period: No path found
-   Minimum input arrival time before clock: No path found
-   Maximum output required time after clock: No path found
-   Maximum combinational path delay: 4.372ns
+   Minimum period: 3.427ns (Maximum Frequency: 291.843MHz)
+   Minimum input arrival time before clock: 3.615ns
+   Maximum output required time after clock: 3.634ns
+   Maximum combinational path delay: No path found
 
 Timing Details:
 ---------------
 All values displayed in nanoseconds (ns)
 
 =========================================================================
-Timing constraint: Default path analysis
-  Total number of paths / destination ports: 8 / 8
+Timing constraint: Default period analysis for Clock 'clk'
+  Clock period: 3.427ns (frequency: 291.843MHz)
+  Total number of paths / destination ports: 286 / 25
 -------------------------------------------------------------------------
-Delay:               4.372ns (Levels of Logic = 2)
-  Source:            sw<7> (PAD)
-  Destination:       Led<7> (PAD)
+Delay:               1.713ns (Levels of Logic = 1)
+  Source:            M1/keydirection (FF)
+  Destination:       M1/button_out_0 (FF)
+  Source Clock:      clk rising
+  Destination Clock: clk falling
 
-  Data Path: sw<7> to Led<7>
+  Data Path: M1/keydirection to M1/button_out_0
                                 Gate     Net
     Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
     ----------------------------------------  ------------
-     IBUF:I->O             1   1.222   0.579  sw_7_IBUF (Led_7_OBUF)
+     FD:C->Q               2   0.447   0.961  M1/keydirection (M1/keydirection)
+     LUT6:I1->O            1   0.203   0.000  M1/button_out_0_rstpot (M1/button_out_0_rstpot)
+     FD_1:D                    0.102          M1/button_out_0
+    ----------------------------------------
+    Total                      1.713ns (0.752ns logic, 0.961ns route)
+                                       (43.9% logic, 56.1% route)
+
+=========================================================================
+Timing constraint: Default period analysis for Clock 'M1/button_out_0'
+  Clock period: 1.837ns (frequency: 544.292MHz)
+  Total number of paths / destination ports: 36 / 8
+-------------------------------------------------------------------------
+Delay:               1.837ns (Levels of Logic = 9)
+  Source:            num_0 (FF)
+  Destination:       num_7 (FF)
+  Source Clock:      M1/button_out_0 rising
+  Destination Clock: M1/button_out_0 rising
+
+  Data Path: num_0 to num_7
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FD:C->Q               2   0.447   0.616  num_0 (num_0)
+     INV:I->O              1   0.206   0.000  Mcount_num_lut<0>_INV_0 (Mcount_num_lut<0>)
+     MUXCY:S->O            1   0.172   0.000  Mcount_num_cy<0> (Mcount_num_cy<0>)
+     MUXCY:CI->O           1   0.019   0.000  Mcount_num_cy<1> (Mcount_num_cy<1>)
+     MUXCY:CI->O           1   0.019   0.000  Mcount_num_cy<2> (Mcount_num_cy<2>)
+     MUXCY:CI->O           1   0.019   0.000  Mcount_num_cy<3> (Mcount_num_cy<3>)
+     MUXCY:CI->O           1   0.019   0.000  Mcount_num_cy<4> (Mcount_num_cy<4>)
+     MUXCY:CI->O           1   0.019   0.000  Mcount_num_cy<5> (Mcount_num_cy<5>)
+     MUXCY:CI->O           0   0.019   0.000  Mcount_num_cy<6> (Mcount_num_cy<6>)
+     XORCY:CI->O           1   0.180   0.000  Mcount_num_xor<7> (Result<7>1)
+     FD:D                      0.102          num_7
+    ----------------------------------------
+    Total                      1.837ns (1.221ns logic, 0.616ns route)
+                                       (66.5% logic, 33.5% route)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'clk'
+  Total number of paths / destination ports: 10 / 2
+-------------------------------------------------------------------------
+Offset:              3.615ns (Levels of Logic = 3)
+  Source:            btn<0> (PAD)
+  Destination:       M1/keydirection (FF)
+  Destination Clock: clk rising
+
+  Data Path: btn<0> to M1/keydirection
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O             2   1.222   0.961  btn_0_IBUF (btn_0_IBUF)
+     LUT5:I0->O            1   0.203   0.924  M1/out1 (M1/keybutton)
+     LUT5:I0->O            1   0.203   0.000  M1/keydirection_rstpot (M1/keydirection_rstpot)
+     FD:D                      0.102          M1/keydirection
+    ----------------------------------------
+    Total                      3.615ns (1.730ns logic, 1.885ns route)
+                                       (47.9% logic, 52.1% route)
+
+=========================================================================
+Timing constraint: Default OFFSET OUT AFTER for Clock 'M1/button_out_0'
+  Total number of paths / destination ports: 8 / 8
+-------------------------------------------------------------------------
+Offset:              3.634ns (Levels of Logic = 1)
+  Source:            num_7 (FF)
+  Destination:       Led<7> (PAD)
+  Source Clock:      M1/button_out_0 rising
+
+  Data Path: num_7 to Led<7>
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     FD:C->Q               2   0.447   0.616  num_7 (num_7)
      OBUF:I->O                 2.571          Led_7_OBUF (Led<7>)
     ----------------------------------------
-    Total                      4.372ns (3.793ns logic, 0.579ns route)
-                                       (86.8% logic, 13.2% route)
+    Total                      3.634ns (3.018ns logic, 0.616ns route)
+                                       (83.0% logic, 17.0% route)
 
 =========================================================================
 
 Cross Clock Domains Report:
 --------------------------
 
+Clock to Setup on destination clock M1/button_out_0
+---------------+---------+---------+---------+---------+
+               | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock   |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+---------------+---------+---------+---------+---------+
+M1/button_out_0|    1.837|         |         |         |
+---------------+---------+---------+---------+---------+
+
+Clock to Setup on destination clock clk
+---------------+---------+---------+---------+---------+
+               | Src:Rise| Src:Fall| Src:Rise| Src:Fall|
+Source Clock   |Dest:Rise|Dest:Rise|Dest:Fall|Dest:Fall|
+---------------+---------+---------+---------+---------+
+clk            |    2.085|         |    2.738|         |
+---------------+---------+---------+---------+---------+
+
 =========================================================================
 
 
-Total REAL time to Xst completion: 3.00 secs
-Total CPU time to Xst completion: 3.21 secs
+Total REAL time to Xst completion: 4.00 secs
+Total CPU time to Xst completion: 4.10 secs
  
 --> 
 
-Total memory usage is 211112 kilobytes
+Total memory usage is 216488 kilobytes
 
 Number of errors   :    0 (   0 filtered)
-Number of warnings :    2 (   0 filtered)
-Number of infos    :    0 (   0 filtered)
+Number of warnings :   41 (   0 filtered)
+Number of infos    :    9 (   0 filtered)
 
