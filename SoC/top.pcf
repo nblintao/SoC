@@ -1,5 +1,5 @@
 //! **************************************************************************
-// Written by: Map M.81d on Thu Aug 21 21:08:21 2014
+// Written by: Map M.81d on Fri Aug 22 11:32:17 2014
 //! **************************************************************************
 
 SCHEMATIC START;
@@ -44,7 +44,11 @@ TIMEGRP sys_clk_pin = BEL "M2/clkdiv_0" BEL "M2/clkdiv_1" BEL "M2/clkdiv_2"
         "M2/clkdiv_13" BEL "M2/clkdiv_14" BEL "M2/clkdiv_15" BEL
         "M2/clkdiv_16" BEL "M2/clkdiv_17" BEL "M2/clkdiv_18" BEL
         "M2/clkdiv_19" BEL "M2/clkdiv_20" BEL "M2/clkdiv_21" BEL
-        "M2/clkdiv_22" BEL "M1/keydirection" BEL "M1/button_out_0" BEL
+        "M2/clkdiv_22" BEL "M4/SEGMENT_6" BEL "M4/SEGMENT_5" BEL
+        "M4/SEGMENT_4" BEL "M4/SEGMENT_3" BEL "M4/SEGMENT_2" BEL
+        "M4/SEGMENT_1" BEL "M4/SEGMENT_0" BEL "M4/code_3" BEL "M4/code_2" BEL
+        "M4/code_1" BEL "M4/code_0" BEL "M4/AN_3" BEL "M4/AN_2" BEL "M4/AN_1"
+        BEL "M4/AN_0" BEL "M1/keydirection" BEL "M1/button_out_3" BEL
         "clk_BUFGP/BUFG";
 TS_sys_clk_pin = PERIOD TIMEGRP "sys_clk_pin" 100 MHz HIGH 50%;
 SCHEMATIC END;
