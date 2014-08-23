@@ -1,9 +1,28 @@
-Release 12.4 - par M.81d (nt)
+Release 12.4 - par M.81d (nt64)
 Copyright (c) 1995-2010 Xilinx, Inc.  All rights reserved.
 
-Fri Aug 22 11:32:27 2014
+Sat Aug 23 13:19:44 2014
 
 All signals are completely routed.
 
+WARNING:ParHelpers:361 - There are 16 loadless signals in this design. This design will cause Bitgen to issue DRC
+   warnings.
+
+   M0/cpu/Mram_regfile11_RAMD_D1_O
+   M0/cpu/Mram_regfile12_RAMD_D1_O
+   M0/cpu/Mram_regfile13_RAMD_D1_O
+   M0/cpu/Mram_regfile14_RAMD_D1_O
+   M0/cpu/Mram_regfile15_RAMD_D1_O
+   M0/cpu/Mram_regfile2_RAMD_D1_O
+   M0/cpu/Mram_regfile3_RAMD_D1_O
+   M0/cpu/Mram_regfile4_RAMD_D1_O
+   M0/cpu/Mram_regfile5_RAMD_D1_O
+   M0/cpu/Mram_regfile6_RAMD_D1_O
+   M0/kbd/Mram_fifo1_RAMD_D1_O
+   btn<0>_IBUF
+   btn<1>_IBUF
+   btn<2>_IBUF
+   btn<3>_IBUF
+   btn<4>_IBUF
 
 

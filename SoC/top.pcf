@@ -1,55 +1,62 @@
 //! **************************************************************************
-// Written by: Map M.81d on Fri Aug 22 11:32:17 2014
+// Written by: Map M.81d on Sat Aug 23 13:19:19 2014
 //! **************************************************************************
 
 SCHEMATIC START;
-COMP "Led<3>" LOCATE = SITE "V15" LEVEL 1;
-COMP "Led<4>" LOCATE = SITE "M11" LEVEL 1;
-COMP "an<0>" LOCATE = SITE "N16" LEVEL 1;
-COMP "Led<5>" LOCATE = SITE "N11" LEVEL 1;
-COMP "an<1>" LOCATE = SITE "N15" LEVEL 1;
-COMP "Led<6>" LOCATE = SITE "R11" LEVEL 1;
-COMP "an<2>" LOCATE = SITE "P18" LEVEL 1;
-COMP "Led<7>" LOCATE = SITE "T11" LEVEL 1;
-COMP "an<3>" LOCATE = SITE "P17" LEVEL 1;
-COMP "btn<0>" LOCATE = SITE "B8" LEVEL 1;
-COMP "btn<1>" LOCATE = SITE "A8" LEVEL 1;
-COMP "btn<2>" LOCATE = SITE "C4" LEVEL 1;
-COMP "clk" LOCATE = SITE "V10" LEVEL 1;
-COMP "btn<3>" LOCATE = SITE "C9" LEVEL 1;
-COMP "btn<4>" LOCATE = SITE "D9" LEVEL 1;
-COMP "seg<0>" LOCATE = SITE "T17" LEVEL 1;
-COMP "seg<1>" LOCATE = SITE "T18" LEVEL 1;
-COMP "seg<2>" LOCATE = SITE "U17" LEVEL 1;
+COMP "Vsync" LOCATE = SITE "P7" LEVEL 1;
 COMP "sw<0>" LOCATE = SITE "T10" LEVEL 1;
-COMP "seg<3>" LOCATE = SITE "U18" LEVEL 1;
 COMP "sw<1>" LOCATE = SITE "T9" LEVEL 1;
-COMP "seg<4>" LOCATE = SITE "M14" LEVEL 1;
 COMP "sw<2>" LOCATE = SITE "V9" LEVEL 1;
-COMP "seg<5>" LOCATE = SITE "N14" LEVEL 1;
 COMP "sw<3>" LOCATE = SITE "M8" LEVEL 1;
-COMP "seg<6>" LOCATE = SITE "L14" LEVEL 1;
 COMP "sw<4>" LOCATE = SITE "N8" LEVEL 1;
-COMP "seg<7>" LOCATE = SITE "M13" LEVEL 1;
 COMP "sw<5>" LOCATE = SITE "U8" LEVEL 1;
 COMP "sw<6>" LOCATE = SITE "V8" LEVEL 1;
 COMP "sw<7>" LOCATE = SITE "T5" LEVEL 1;
 COMP "Led<0>" LOCATE = SITE "U16" LEVEL 1;
 COMP "Led<1>" LOCATE = SITE "V16" LEVEL 1;
 COMP "Led<2>" LOCATE = SITE "U15" LEVEL 1;
-TIMEGRP sys_clk_pin = BEL "M2/clkdiv_0" BEL "M2/clkdiv_1" BEL "M2/clkdiv_2"
-        BEL "M2/clkdiv_3" BEL "M2/clkdiv_4" BEL "M2/clkdiv_5" BEL
-        "M2/clkdiv_6" BEL "M2/clkdiv_7" BEL "M2/clkdiv_8" BEL "M2/clkdiv_9"
-        BEL "M2/clkdiv_10" BEL "M2/clkdiv_11" BEL "M2/clkdiv_12" BEL
-        "M2/clkdiv_13" BEL "M2/clkdiv_14" BEL "M2/clkdiv_15" BEL
-        "M2/clkdiv_16" BEL "M2/clkdiv_17" BEL "M2/clkdiv_18" BEL
-        "M2/clkdiv_19" BEL "M2/clkdiv_20" BEL "M2/clkdiv_21" BEL
-        "M2/clkdiv_22" BEL "M4/SEGMENT_6" BEL "M4/SEGMENT_5" BEL
-        "M4/SEGMENT_4" BEL "M4/SEGMENT_3" BEL "M4/SEGMENT_2" BEL
-        "M4/SEGMENT_1" BEL "M4/SEGMENT_0" BEL "M4/code_3" BEL "M4/code_2" BEL
-        "M4/code_1" BEL "M4/code_0" BEL "M4/AN_3" BEL "M4/AN_2" BEL "M4/AN_1"
-        BEL "M4/AN_0" BEL "M1/keydirection" BEL "M1/button_out_3" BEL
-        "clk_BUFGP/BUFG";
+COMP "Led<3>" LOCATE = SITE "V15" LEVEL 1;
+COMP "Led<4>" LOCATE = SITE "M11" LEVEL 1;
+COMP "Led<5>" LOCATE = SITE "N11" LEVEL 1;
+COMP "Led<6>" LOCATE = SITE "R11" LEVEL 1;
+COMP "Led<7>" LOCATE = SITE "T11" LEVEL 1;
+COMP "btn<0>" LOCATE = SITE "B8" LEVEL 1;
+COMP "btn<1>" LOCATE = SITE "A8" LEVEL 1;
+COMP "btn<2>" LOCATE = SITE "C4" LEVEL 1;
+COMP "btn<3>" LOCATE = SITE "C9" LEVEL 1;
+COMP "btn<4>" LOCATE = SITE "D9" LEVEL 1;
+COMP "seg<0>" LOCATE = SITE "T17" LEVEL 1;
+COMP "seg<1>" LOCATE = SITE "T18" LEVEL 1;
+COMP "seg<2>" LOCATE = SITE "U17" LEVEL 1;
+COMP "seg<3>" LOCATE = SITE "U18" LEVEL 1;
+COMP "seg<4>" LOCATE = SITE "M14" LEVEL 1;
+COMP "seg<5>" LOCATE = SITE "N14" LEVEL 1;
+COMP "seg<6>" LOCATE = SITE "L14" LEVEL 1;
+COMP "seg<7>" LOCATE = SITE "M13" LEVEL 1;
+COMP "vgaRed<0>" LOCATE = SITE "U7" LEVEL 1;
+COMP "vgaRed<1>" LOCATE = SITE "V7" LEVEL 1;
+COMP "vgaRed<2>" LOCATE = SITE "N7" LEVEL 1;
+COMP "PS2KeyboardData" LOCATE = SITE "J13" LEVEL 1;
+COMP "clk" LOCATE = SITE "V10" LEVEL 1;
+COMP "PS2KeyboardClk" LOCATE = SITE "L12" LEVEL 1;
+COMP "an<0>" LOCATE = SITE "N16" LEVEL 1;
+COMP "an<1>" LOCATE = SITE "N15" LEVEL 1;
+COMP "an<2>" LOCATE = SITE "P18" LEVEL 1;
+COMP "an<3>" LOCATE = SITE "P17" LEVEL 1;
+COMP "Hsync" LOCATE = SITE "N6" LEVEL 1;
+COMP "vgaGreen<0>" LOCATE = SITE "P8" LEVEL 1;
+COMP "vgaGreen<1>" LOCATE = SITE "T6" LEVEL 1;
+COMP "vgaGreen<2>" LOCATE = SITE "V6" LEVEL 1;
+COMP "vgaBlue<1>" LOCATE = SITE "R7" LEVEL 1;
+COMP "vgaBlue<2>" LOCATE = SITE "T7" LEVEL 1;
+TIMEGRP sys_clk_pin = BEL "sys_clk" BEL "M2/clkdiv_0" BEL "M2/clkdiv_1" BEL
+        "M2/clkdiv_2" BEL "M2/clkdiv_3" BEL "M2/clkdiv_4" BEL "M2/clkdiv_5"
+        BEL "M2/clkdiv_6" BEL "M2/clkdiv_7" BEL "M2/clkdiv_8" BEL
+        "M2/clkdiv_9" BEL "M2/clkdiv_10" BEL "M2/clkdiv_11" BEL "M2/clkdiv_12"
+        BEL "M2/clkdiv_13" BEL "M2/clkdiv_14" BEL "M2/clkdiv_15" BEL
+        "M2/clkdiv_16" BEL "M2/clkdiv_17" BEL "M2/clkdiv_18" BEL "M4/AN_3" BEL
+        "M4/AN_2" BEL "M4/AN_1" BEL "M4/AN_0" BEL "clk_BUFGP/BUFG" BEL
+        "M4/Mshreg_SEGMENT_5" BEL "M4/SEGMENT_5";
 TS_sys_clk_pin = PERIOD TIMEGRP "sys_clk_pin" 100 MHz HIGH 50%;
 SCHEMATIC END;
 
