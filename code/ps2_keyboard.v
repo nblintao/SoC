@@ -1,23 +1,8 @@
-`timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date:    13:54:03 08/22/2014 
-// Design Name: 
-// Module Name:    ps2_keyboard 
-// Project Name: 
-// Target Devices: 
-// Tool versions: 
-// Description: 
-//
-// Dependencies: 
-//
-// Revision: 
-// Revision 0.01 - File Created
-// Additional Comments: 
-//
-//////////////////////////////////////////////////////////////////////////////////
+/************************************************
+  The Verilog HDL code example is from the book
+  Computer Principles and Design in Verilog HDL
+  by Yamin Li, published by A JOHN WILEY & SONS
+************************************************/
 module ps2_keyboard (clk,clrn,ps2_clk,ps2_data,rdn,data,ready,overflow);
     input        clk, clrn;                    // 50 MHz
     input        ps2_clk;                      // ps2 clock
@@ -65,4 +50,3 @@ module ps2_keyboard (clk,clrn,ps2_clk,ps2_data,rdn,data,ready,overflow);
     assign ready = (w_ptr != r_ptr);           // fifo is not empty
     assign data  = fifo[r_ptr];                // code byte
 endmodule
-

@@ -1,23 +1,8 @@
-`timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date:    13:42:27 08/22/2014 
-// Design Name: 
-// Module Name:    vgac 
-// Project Name: 
-// Target Devices: 
-// Tool versions: 
-// Description: 
-//
-// Dependencies: 
-//
-// Revision: 
-// Revision 0.01 - File Created
-// Additional Comments: 
-//
-//////////////////////////////////////////////////////////////////////////////////
+/************************************************
+  The Verilog HDL code example is from the book
+  Computer Principles and Design in Verilog HDL
+  by Yamin Li, published by A JOHN WILEY & SONS
+************************************************/
 module vgac (vga_clk,clrn,d_in,row_addr,col_addr,rdn,r,g,b,hs,vs);   // vgac
     input     [23:0] d_in;       // rrrrrrrr_gggggggg_bbbbbbbb, pixel
     input            vga_clk;    // 25MHz
@@ -72,4 +57,3 @@ module vgac (vga_clk,clrn,d_in,row_addr,col_addr,rdn,r,g,b,hs,vs);   // vgac
         b        <=  rdn ? 8'h0 : d_in[07:00];    // 8-bit blue
     end
 endmodule
-

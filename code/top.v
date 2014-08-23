@@ -24,13 +24,13 @@ module top( input wire clk,
             output wire [7:0] Led,
             input wire [7:0] sw,
             input wire [4:0] btn,
-input wire PS2KeyboardData,
-input wire PS2KeyboardClk,
-output wire [2:0] vgaRed,
-output wire [2:0] vgaGreen,
-output wire [2:0] vgaBlue,
-output wire Hsync,
-output wire Vsync
+            input wire PS2KeyboardData,
+            input wire PS2KeyboardClk,
+            output wire [2:0] vgaRed,
+            output wire [2:0] vgaGreen,
+            output wire [2:0] vgaBlue,
+            output wire Hsync,
+            output wire Vsync
             );
 
     assign Led[7:0] = sw[7:0];
@@ -49,14 +49,16 @@ output wire Vsync
     // sw[2]: slow/quick CPU
 
     BTN_Anti M1 (clk, clkdiv, btn, , btn_out, );
-    clk_div M2 (clk, 0, sw[2], clkdiv, cpu_clk);
+    clk_div M2 (clk, 1'b0, sw[2], clkdiv, cpu_clk);
     // multiple_cycle_cpu M3 (cpu_clk, 1, m_addr, d_f_mem, d_t_mem, w_d_mem, wr_vram, rd_vram, io_rdn, state);
     seven_seg M4 (clk, disp_num, sw[1:0], clkdiv[18:17], seg, an);
 
-    // assign disp_num = num;
+    assign disp_num = num;
 
-    // reg [31:0] num;
-    // always @(posedge btn_out[3]) begin num = num + 1000; end
+    reg [31:0] num = 0;
+    // always @(PS2KeyboardData) begin
+    //     num = num + 1;
+    // end
 
     reg sys_clk = 1;
     always @(posedge clk) begin
@@ -68,9 +70,22 @@ output wire Vsync
     assign vgaGreen = g[7:5];
     assign vgaBlue[2:1] = b[7:6];
 
-    display_scan_codes M0 (sys_clk, 1'b1, PS2KeyboardClk, PS2KeyboardData,r,g,b,Hsync,Vsync,,,,sw,disp_num);
+// assign   r=0;
+// assign   g=0;
+// assign   b=0;
+// assign   Hsync=0;
+// assign   Vsync=0; 
+display_scan_codes M0 (sys_clk, ~btn_out[0], PS2KeyboardClk, PS2KeyboardData,r,g,b,Hsync,Vsync, , , );
 
+    // wire [7:0] data;
+    // ps2_keyboard KEY (clk,~btn_out[0],PS2KeyboardClk,PS2KeyboardData,1'b0,data,ready,overflow);
 
-
-
+    // always @(posedge ready) begin
+    //     num <= {num[31:8],data};
+    //     // num = num + 1;
+    // end
+// always @(posedge sampling) begin
+//     // num <= {num[31:8],data};
+//     num = num + 1;
+// end
 endmodule

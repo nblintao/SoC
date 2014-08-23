@@ -1,1 +1,0 @@
-xst -intstyle ise -ifn "D:/SoC/SoC/display_scan_codes.xst" -ofn "D:/SoC/SoC/display_scan_codes.syr" 

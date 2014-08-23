@@ -1,23 +1,8 @@
-`timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date:    13:43:40 08/22/2014 
-// Design Name: 
-// Module Name:    single_cycle_cpu_io 
-// Project Name: 
-// Target Devices: 
-// Tool versions: 
-// Description: 
-//
-// Dependencies: 
-//
-// Revision: 
-// Revision 0.01 - File Created
-// Additional Comments: 
-//
-//////////////////////////////////////////////////////////////////////////////////
+/************************************************
+  The Verilog HDL code example is from the book
+  Computer Principles and Design in Verilog HDL
+  by Yamin Li, published by A JOHN WILEY & SONS
+************************************************/
 module single_cycle_cpu_io (clk,clrn,pc,inst,m_addr,d_f_mem,d_t_mem,write,
                             io_rdn,io_wrn,rvram,wvram); // cpu kbd i/o
     input  clk, clrn;                                   // clock and reset
