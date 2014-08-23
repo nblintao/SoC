@@ -1,0 +1,7 @@
+verilog work "ipcore_dir/data_ram.v"
+verilog work "vgac.v"
+verilog work "single_cycle_cpu_io.v"
+verilog work "scinstmem_make_code_break_code.v"
+verilog work "ps2_keyboard.v"
+verilog work "font_table.v"
+verilog work "display_scan_codes.v"
