@@ -42,3 +42,36 @@ module scinstmem_make_code_break_code (a,inst);   // instruction memory, rom
     assign rom[6'h1e] = 32'b00000000000000000000000000000000;
     assign rom[6'h1f] = 32'b00000000000000000000000000000000;
 endmodule
+
+// lui $v1, C000
+// lui $a0, A000
+// lw $a1,0($a0)
+// andi $a2,$a1,256
+// beq $a2,$zero,-3
+// andi $a2,$a1,255
+// srl $a1,$a2,4
+// addi $a3,$a1,-10
+// srl $a3,$a3,31
+// beq $a3,$zero,2
+// addi $a1,$a1,48
+// j 13
+// addi $a1,$a1,55
+// jal 25
+// andi $a1,$a2,15
+// addi $a3,$a1,-10
+// srl $a3,$a3,31
+// beq $a3,$zero,2
+// addi $a1,$a1,48
+// j 21
+// addi $a1,$a1,55
+// jal 25
+// addi $a1,$zero,32
+// jal 25
+// j 2
+// sw $a1,0($v1)
+// addi $v1,$v1,4
+// jr $ra
+// sll $zero,$zero,0
+// sll $zero,$zero,0
+// sll $zero,$zero,0
+// sll $zero,$zero,0

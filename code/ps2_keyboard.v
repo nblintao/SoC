@@ -3,7 +3,7 @@
   Computer Principles and Design in Verilog HDL
   by Yamin Li, published by A JOHN WILEY & SONS
 ************************************************/
-module ps2_keyboard (clk,clrn,ps2_clk,ps2_data,rdn,data,ready,overflow);
+module mio_ps2 (clk,clrn,ps2_clk,ps2_data,rdn,data,ready,overflow);
     input        clk, clrn;                    // 50 MHz
     input        ps2_clk;                      // ps2 clock
     input        ps2_data;                     // ps2 data

@@ -37,10 +37,6 @@ module top( input wire clk,
 
     wire [31:0] clkdiv;
     wire [4:0] btn_out;
-    wire [31:0] m_addr;
-    wire [31:0] d_f_mem;
-    wire [31:0] d_t_mem;
-    wire [2:0] state;
     wire [31:0] disp_num;
 
     // Infomation about switch
@@ -48,10 +44,7 @@ module top( input wire clk,
     // sw[1]: head/tail 16 bits
     // sw[2]: slow/quick CPU
 
-    BTN_Anti M1 (clk, clkdiv, btn, , btn_out, );
-    clk_div M2 (clk, 1'b0, sw[2], clkdiv, cpu_clk);
-    // multiple_cycle_cpu M3 (cpu_clk, 1, m_addr, d_f_mem, d_t_mem, w_d_mem, wr_vram, rd_vram, io_rdn, state);
-    seven_seg M4 (clk, disp_num, sw[1:0], clkdiv[18:17], seg, an);
+
 
     assign disp_num = num;
 
@@ -65,27 +58,64 @@ module top( input wire clk,
         sys_clk <= ~sys_clk;
     end
 
+
+    BTN_Anti M1 (clk, clkdiv, btn, , btn_out, );
+    clk_div M2 (clk, 1'b0, sw[2], clkdiv, cpu_clk);
+    seven_seg M4 (clk, disp_num, sw[1:0], clkdiv[18:17], seg, an);
+
+    wire clrn;
+    assign clrn = ~btn_out[0];
+
     wire [7:0] r,g,b;
     assign vgaRed = r[7:5];
     assign vgaGreen = g[7:5];
     assign vgaBlue[2:1] = b[7:6];
 
-// assign   r=0;
-// assign   g=0;
-// assign   b=0;
-// assign   Hsync=0;
-// assign   Vsync=0; 
-display_scan_codes M0 (sys_clk, ~btn_out[0], PS2KeyboardClk, PS2KeyboardData,r,g,b,Hsync,Vsync, , , );
+    wire  [31:0] inst,pc,d_t_mem,cpu_mem_a,d_f_mem;
+    wire         write,read,io_rdn,io_wrn,wvram,rvram,ready,overflow;
+    wire   [7:0] key_data;          // kbd code byte
+    wire [6:0] ascii;
 
-    // wire [7:0] data;
-    // ps2_keyboard KEY (clk,~btn_out[0],PS2KeyboardClk,PS2KeyboardData,1'b0,data,ready,overflow);
+    // cpu
+    single_cycle_cpu_io M0 (sys_clk,clrn,pc,inst,cpu_mem_a,d_f_mem,
+                             d_t_mem,write,io_rdn,io_wrn,rvram,wvram);
+    
 
-    // always @(posedge ready) begin
-    //     num <= {num[31:8],data};
-    //     // num = num + 1;
-    // end
-// always @(posedge sampling) begin
-//     // num <= {num[31:8],data};
-//     num = num + 1;
-// end
+    // instruction memory
+    scinstmem_make_code_break_code imem (pc,inst);
+    
+    wire [31:0] d_t_vga;
+    wire [6:0] d_f_vga;
+    wire [31:0] vga_a;
+    // assign d_t_vga = d_t_mem;
+    // assign vga_a = cpu_mem_a;
+
+    mio_vga IO1 (sys_clk,clrn,r,g,b,Hsync,Vsync,vga_clk,blankn,syncn,d_t_vga,vga_a,d_f_vga,wvram);
+
+    mio_ps2 kbd (sys_clk,clrn,PS2KeyboardClk,PS2KeyboardData,io_rdn,key_data,ready,overflow);
+
+    mio_bus MIO0(   cpu_mem_a, d_t_mem, d_f_mem,
+                    vga_a ,d_t_vga, d_f_vga,
+                    io_rdn, ready, key_data
+        );
+
+endmodule
+
+module mio_bus(
+    input [31:0] cpu_mem_a,
+    input [31:0] d_t_mem,
+    output [31:0] d_f_mem,
+
+    output [31:0] vga_a,
+    output [31:0] d_t_vga,
+    input [6:0] d_f_vga,
+
+    input io_rdn,
+    input ready,
+    input [7:0] key_data
+    );
+
+    assign d_t_vga = d_t_mem;
+    assign vga_a = cpu_mem_a;
+    assign d_f_mem = io_rdn? {25'h0,d_f_vga} : {23'h0,ready,key_data};
 endmodule
