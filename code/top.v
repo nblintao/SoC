@@ -77,27 +77,32 @@ module top( input wire clk,
     wire [6:0] ascii;
 
     // cpu
-    single_cycle_cpu_io M0 (sys_clk,clrn,pc,inst,cpu_mem_a,d_f_mem,
-                             d_t_mem,write,io_rdn,io_wrn,rvram,wvram);
-    
+    // single_cycle_cpu_io M0 (sys_clk,clrn,pc,inst,cpu_mem_a,d_f_mem,d_t_mem,write,io_rdn,io_wrn,rvram,wvram);
+    single_cycle_cpu_interrupt M0 (sys_clk, clrn, inst, d_f_mem, pc, write, cpu_mem_a, d_t_mem, io_rdn, wvram, rvram, 1'b0, ready);
 
     // instruction memory
-    scinstmem_make_code_break_code imem (pc,inst);
-    
+    // scinstmem_make_code_break_code imem (pc,inst);
+
+    inst_mem MIO3 (~clk, pc[12:2], inst);
+
     wire [31:0] d_t_vga;
     wire [6:0] d_f_vga;
     wire [31:0] vga_a;
     // assign d_t_vga = d_t_mem;
     // assign vga_a = cpu_mem_a;
 
-    mio_vga IO1 (sys_clk,clrn,r,g,b,Hsync,Vsync,vga_clk,blankn,syncn,d_t_vga,vga_a,d_f_vga,wvram);
+    mio_vga MIO1 (sys_clk,clrn,r,g,b,Hsync,Vsync,vga_clk,blankn,syncn,d_t_vga,vga_a,d_f_vga,wvram);
 
-    mio_ps2 kbd (sys_clk,clrn,PS2KeyboardClk,PS2KeyboardData,io_rdn,key_data,ready,overflow);
+    mio_ps2 MIO2 (sys_clk,clrn,PS2KeyboardClk,PS2KeyboardData,io_rdn,key_data,ready,overflow);
 
     mio_bus MIO0(   cpu_mem_a, d_t_mem, d_f_mem,
                     vga_a ,d_t_vga, d_f_vga,
                     io_rdn, ready, key_data
         );
+
+    always @(posedge ready) begin
+        num = num + 1;
+    end
 
 endmodule
 
