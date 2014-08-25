@@ -1,0 +1,1 @@
+python inst_mem_v_generator.py > ../inst_mem_v.v

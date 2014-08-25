@@ -46,7 +46,9 @@ module top( input wire clk,
 
 
 
-    assign disp_num = num;
+    // assign disp_num = num;
+    assign disp_num = pc;
+
 
     reg [31:0] num = 0;
     // always @(PS2KeyboardData) begin
@@ -78,12 +80,12 @@ module top( input wire clk,
 
     // cpu
     // single_cycle_cpu_io M0 (sys_clk,clrn,pc,inst,cpu_mem_a,d_f_mem,d_t_mem,write,io_rdn,io_wrn,rvram,wvram);
-    single_cycle_cpu_interrupt M0 (sys_clk, clrn, inst, d_f_mem, pc, write, cpu_mem_a, d_t_mem, io_rdn, wvram, rvram, 1'b0, ready);
+    single_cycle_cpu_interrupt M0 (sys_clk, clrn, inst, d_f_mem, pc, write, cpu_mem_a, d_t_mem, io_rdn, wvram, rvram, 1'b0, 1'b0);
 
     // instruction memory
-    // scinstmem_make_code_break_code imem (pc,inst);
+    inst_mem_v MIO3 (pc,inst);
 
-    inst_mem MIO3 (~clk, pc[12:2], inst);
+    // inst_mem MIO3 (~clk, pc[12:2], inst);
 
     wire [31:0] d_t_vga;
     wire [6:0] d_f_vga;

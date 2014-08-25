@@ -29,6 +29,7 @@ module single_cycle_cpu_interrupt (clock, resetn, inst, d_f_mem, pc, write, m_ad
     wire i_and  = (opcode == 6'h00) & (func == 6'h24);
     wire i_or   = (opcode == 6'h00) & (func == 6'h25);
     wire i_xor  = (opcode == 6'h00) & (func == 6'h26);
+    wire i_slt  = (opcode == 6'h00) & (func == 6'h2a);
     wire i_sll  = (opcode == 6'h00) & (func == 6'h00);
     wire i_srl  = (opcode == 6'h00) & (func == 6'h02);
     wire i_sra  = (opcode == 6'h00) & (func == 6'h03);
@@ -37,6 +38,7 @@ module single_cycle_cpu_interrupt (clock, resetn, inst, d_f_mem, pc, write, m_ad
     wire i_andi = (opcode == 6'h0c);
     wire i_ori  = (opcode == 6'h0d);
     wire i_xori = (opcode == 6'h0e);
+    wire i_slti = (opcode == 6'h0a);
     wire i_lw   = (opcode == 6'h23);
     wire i_sw   = (opcode == 6'h2b);
     wire i_beq  = (opcode == 6'h04);
@@ -133,6 +135,9 @@ module single_cycle_cpu_interrupt (clock, resetn, inst, d_f_mem, pc, write, m_ad
             i_xor: begin // xor
                 ALU_out = a ^ b;
                 wreg    = 1; end
+            i_slt: begin // slt
+                ALU_out = a < b;
+                wreg    = 1; end            
             i_sll: begin // sll
                 ALU_out = b << sa;
                 wreg    = 1; end
@@ -160,6 +165,10 @@ module single_cycle_cpu_interrupt (clock, resetn, inst, d_f_mem, pc, write, m_ad
                 ALU_out = a ^ {16'h0,imm};
                 dest_rn = rt;
                 wreg    = 1; end
+            i_slti: begin // slti
+                ALU_out = a < {16'h0,imm};
+                dest_rn = rt;
+                wreg    = 1; end                
             i_lw: begin // lw
                 ALU_out = a + {{16{sign}},imm};
                 dest_rn = rt;
