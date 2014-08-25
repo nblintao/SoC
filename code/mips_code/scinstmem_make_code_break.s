@@ -1,10 +1,15 @@
 .text      
 lui $v1, 49152 #C000 
 lui $a0, 40960 #A000 
+
+addi $t0,$zero,32528 #7F10 segment address
+sw $t0,0($t0)
+
 L2:
 lw $a1,0($a0) 
 andi $a2,$a1,256
 beq $a2,$zero,-3 # ready
+
 andi $a2,$a1,255
 srl $a1,$a2,4 # high 4 bits
 addi $a3,$a1,-10

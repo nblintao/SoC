@@ -1,29 +1,19 @@
-`timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date:    21:14:44 08/21/2014 
-// Design Name: 
-// Module Name:    seven_seg 
-// Project Name: 
-// Target Devices: 
-// Tool versions: 
-// Description: 
-//
-// Dependencies: 
-//
-// Revision: 
-// Revision 0.01 - File Created
-// Additional Comments: 
-//
-//////////////////////////////////////////////////////////////////////////////////
-module seven_seg(   input wire clk, // system clock
-                    input wire [31:0] disp_num,  // 32 bits display data
+module mio_seg(     input wire clk, // system clock
+                    output [31:0] d_f_seg,
+                    input [31:0] d_t_seg,
+                    input wseg,
                     input  wire [1:0] SW,  // head/tail 16 bits , text/graph swtich
                     input wire [1:0] Scanning,  // scaning command
                     output reg [7:0] SEGMENT,  // seven segment output
                     output reg [3:0] AN);  // 4 digits select
+
+    reg [31:0] disp_num = 0;
+    assign d_f_seg = disp_num;
+    always @(posedge wseg) begin
+        if (wseg) begin
+            disp_num <= d_t_seg;
+        end
+    end
 
     wire [15:0] half_disp_num;
     wire [19:0] disp_code;

@@ -139,7 +139,7 @@ module single_cycle_cpu_interrupt (clock, resetn, inst, d_f_mem, pc, m_addr, d_t
             i_addi: begin // addi
                 ALU_out = a + {{16{sign}},imm};
                 dest_rn = rt;
-                wreg    = 1; end
+                wreg    = 1; end         
             i_andi: begin // andi
                 ALU_out = a & {16'h0,imm};
                 dest_rn = rt;

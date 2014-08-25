@@ -37,33 +37,22 @@ module top( input wire clk,
 
     wire [31:0] clkdiv;
     wire [4:0] btn_out;
-    wire [31:0] disp_num;
 
     // Infomation about switch
     // sw[0]: text/graph swtich
     // sw[1]: head/tail 16 bits
     // sw[2]: slow/quick CPU
 
-
-
-    // assign disp_num = num;
-    assign disp_num = pc;
-
-
     reg [31:0] num = 0;
-    // always @(PS2KeyboardData) begin
-    //     num = num + 1;
-    // end
 
     reg sys_clk = 1;
     always @(posedge clk) begin
         sys_clk <= ~sys_clk;
     end
 
-
     BTN_Anti M1 (clk, clkdiv, btn, , btn_out, );
     clk_div M2 (clk, 1'b0, sw[2], clkdiv, cpu_clk);
-    seven_seg M4 (clk, disp_num, sw[1:0], clkdiv[18:17], seg, an);
+    
 
     wire clrn;
     assign clrn = ~btn_out[0];
@@ -73,30 +62,34 @@ module top( input wire clk,
     assign vgaGreen = g[7:5];
     assign vgaBlue[2:1] = b[7:6];
 
-    wire  [31:0] inst,pc,d_t_mem,mem_a,d_f_mem;
-    wire         write,read,io_rdn,io_wrn,wvram,rvram,ready,overflow;
-    wire   [7:0] key_data;          // kbd code byte
-    wire [6:0] ascii;
+    wire [31:0] inst,pc,d_t_mem,mem_a,d_f_mem;
+    wire  write,read,io_rdn,io_wrn,wvram,rvram,ready,overflow;
+    wire [7:0] key_data; 
 
     // cpu
     single_cycle_cpu_interrupt M0 (sys_clk, clrn, inst, d_f_mem, pc, mem_a, d_t_mem, wmem,rmem, 1'b0, 1'b0);
 
-    // instruction memory
-    inst_mem_v MIO3 (pc,inst);
 
     wire [31:0] d_t_vga;
     wire [6:0] d_f_vga;
     wire [31:0] vga_a;
-
+    wire [31:0] d_f_seg,d_t_seg;
 
     mio_vga MIO1 (sys_clk,clrn,r,g,b,Hsync,Vsync,vga_clk,blankn,syncn,d_t_vga,vga_a,d_f_vga,wvram);
 
     mio_ps2 MIO2 (sys_clk,clrn,PS2KeyboardClk,PS2KeyboardData,io_rdn,key_data,ready,overflow);
 
+    mio_seg MIO3 (clk, d_f_seg, d_t_seg, wseg, sw[1:0], clkdiv[18:17], seg, an);
+
+    wire [31:0] ram_a,d_f_ram, d_t_ram;
+    inst_mem_v MIOs (pc,inst, ram_a,d_f_ram,wram,d_t_ram);
+
     mio_bus MIO0(   mem_a, d_t_mem, d_f_mem, wmem, rmem,
                     vga_a ,d_t_vga, d_f_vga, wvram,rvram,
-                    io_rdn, ready, key_data
-        );
+                    io_rdn, ready, key_data,
+                    d_f_seg, d_t_seg, wseg,
+                    ram_a,d_f_ram,wram,d_t_ram
+                    );
 
     always @(posedge ready) begin
         num = num + 1;
