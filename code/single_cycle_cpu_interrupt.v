@@ -1,14 +1,12 @@
-module single_cycle_cpu_interrupt (clock, resetn, inst, d_f_mem, pc, write, m_addr, d_t_mem, io_rdn, wvram, rvram, intr0, intr1);
+module single_cycle_cpu_interrupt (clock, resetn, inst, d_f_mem, pc, m_addr, d_t_mem, wmem, rmem,intr0, intr1);
     input  clock, resetn;  // clock and reset (active low)
     input  [31:0] inst;    // instruction from instruction memory
     input  [31:0] d_f_mem; // data from data memory
     output [31:0] pc;      // program counter to instruction memory
     output [31:0] m_addr;  // data memory address
     output [31:0] d_t_mem; // data to data memory
-    output write;          // data memory write enable
-    output io_rdn;         // i/o read (active low)
-    output wvram;          // vram write enable
-    output rvram;          // vram read
+    output wmem;
+    output rmem;
     input  intr0;          // interrupt request for timer
     input  intr1;          // interrupt request for keyboard
 
@@ -90,20 +88,9 @@ module single_cycle_cpu_interrupt (clock, resetn, inst, d_f_mem, pc, write, m_ad
 
     // pc + 4
     wire [31:0] pc_plus_4 = pc + 4;
-    wire io_space = ALU_out[31] & // i/o space:
-                   ~ALU_out[30] & // a000_0000 -
-                    ALU_out[29];  // bfff_ffff
-    wire vr_space = ALU_out[31] & // vram space:
-                    ALU_out[30] & // c000_0000 -
-                   ~ALU_out[29];  // dfff_ffff
-
-    // output signals
-    assign write   =   wmem & ~io_space & ~vr_space; // not io not vr
+    
     assign d_t_mem =   b;
     assign m_addr  =   ALU_out;
-    assign io_rdn  = ~(rmem & io_space); // i/o read, active low
-    assign wvram   =   wmem & vr_space;  // char ram write
-    assign rvram   =   rmem & vr_space;  // char ram read
    
     // control signals and ALU output
     // will be combinational circuit

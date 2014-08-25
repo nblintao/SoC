@@ -23,9 +23,9 @@ addi $a1,$a1,48 # +'0'
 j L21
 addi $a1,$a1,55 # +'A'-10
 L21:
-jal air
+jal print
 addi $a1,$zero,32
-jal air
+jal print
 j L2
 
 

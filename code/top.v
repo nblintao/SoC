@@ -73,32 +73,28 @@ module top( input wire clk,
     assign vgaGreen = g[7:5];
     assign vgaBlue[2:1] = b[7:6];
 
-    wire  [31:0] inst,pc,d_t_mem,cpu_mem_a,d_f_mem;
+    wire  [31:0] inst,pc,d_t_mem,mem_a,d_f_mem;
     wire         write,read,io_rdn,io_wrn,wvram,rvram,ready,overflow;
     wire   [7:0] key_data;          // kbd code byte
     wire [6:0] ascii;
 
     // cpu
-    // single_cycle_cpu_io M0 (sys_clk,clrn,pc,inst,cpu_mem_a,d_f_mem,d_t_mem,write,io_rdn,io_wrn,rvram,wvram);
-    single_cycle_cpu_interrupt M0 (sys_clk, clrn, inst, d_f_mem, pc, write, cpu_mem_a, d_t_mem, io_rdn, wvram, rvram, 1'b0, 1'b0);
+    single_cycle_cpu_interrupt M0 (sys_clk, clrn, inst, d_f_mem, pc, mem_a, d_t_mem, wmem,rmem, 1'b0, 1'b0);
 
     // instruction memory
     inst_mem_v MIO3 (pc,inst);
 
-    // inst_mem MIO3 (~clk, pc[12:2], inst);
-
     wire [31:0] d_t_vga;
     wire [6:0] d_f_vga;
     wire [31:0] vga_a;
-    // assign d_t_vga = d_t_mem;
-    // assign vga_a = cpu_mem_a;
+
 
     mio_vga MIO1 (sys_clk,clrn,r,g,b,Hsync,Vsync,vga_clk,blankn,syncn,d_t_vga,vga_a,d_f_vga,wvram);
 
     mio_ps2 MIO2 (sys_clk,clrn,PS2KeyboardClk,PS2KeyboardData,io_rdn,key_data,ready,overflow);
 
-    mio_bus MIO0(   cpu_mem_a, d_t_mem, d_f_mem,
-                    vga_a ,d_t_vga, d_f_vga,
+    mio_bus MIO0(   mem_a, d_t_mem, d_f_mem, wmem, rmem,
+                    vga_a ,d_t_vga, d_f_vga, wvram,rvram,
                     io_rdn, ready, key_data
         );
 
@@ -106,23 +102,4 @@ module top( input wire clk,
         num = num + 1;
     end
 
-endmodule
-
-module mio_bus(
-    input [31:0] cpu_mem_a,
-    input [31:0] d_t_mem,
-    output [31:0] d_f_mem,
-
-    output [31:0] vga_a,
-    output [31:0] d_t_vga,
-    input [6:0] d_f_vga,
-
-    input io_rdn,
-    input ready,
-    input [7:0] key_data
-    );
-
-    assign d_t_vga = d_t_mem;
-    assign vga_a = cpu_mem_a;
-    assign d_f_mem = io_rdn? {25'h0,d_f_vga} : {23'h0,ready,key_data};
 endmodule
