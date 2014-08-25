@@ -31,7 +31,10 @@ module single_cycle_cpu_interrupt (clock, resetn, inst, d_f_mem, pc, m_addr, d_t
     wire i_sll  = (opcode == 6'h00) & (func == 6'h00);
     wire i_srl  = (opcode == 6'h00) & (func == 6'h02);
     wire i_sra  = (opcode == 6'h00) & (func == 6'h03);
-    wire i_jr   = (opcode == 6'h00) & (func == 6'h08);
+    wire i_sllv = (opcode == 6'h00) & (func == 6'h04);
+    wire i_srlv = (opcode == 6'h00) & (func == 6'h06);
+    wire i_srav = (opcode == 6'h00) & (func == 6'h07);    
+    wire i_jr   = (opcode == 6'h00) & (func == 6'h08);    
     wire i_addi = (opcode == 6'h08);
     wire i_andi = (opcode == 6'h0c);
     wire i_ori  = (opcode == 6'h0d);
@@ -133,6 +136,15 @@ module single_cycle_cpu_interrupt (clock, resetn, inst, d_f_mem, pc, m_addr, d_t
                 wreg    = 1; end
             i_sra: begin // sra
                 ALU_out = $signed(b) >>> sa;
+                wreg    = 1; end
+            i_sllv: begin // sllv
+                ALU_out = b << a;
+                wreg    = 1; end
+            i_srlv: begin // srlv
+                ALU_out = b >> a;
+                wreg    = 1; end
+            i_srav: begin // srav
+                ALU_out = $signed(b) >>> a;
                 wreg    = 1; end
             i_jr: begin // jr
                 next_pc = a; end
