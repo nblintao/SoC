@@ -1,4 +1,12 @@
 .text
+nop
+nop
+nop
+addi $v1,$zero,0
+addi $s4,$zero,62
+sw $s4,0($v1)
+
+
 lui $v1, 49152 #C000 VGA
 #lui $a0, 40960 #A000 IO
 

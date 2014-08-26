@@ -32,8 +32,8 @@ module top( input wire clk,
             output wire Hsync,
             output wire Vsync
             );
-
-    assign Led[7:0] = sw[7:0];
+wire [7:0] led_num;
+    assign Led[7:0] = led_num;
 
     wire [31:0] clkdiv;
     wire [4:0] btn_out;
@@ -82,7 +82,7 @@ module top( input wire clk,
     mio_seg MIO3 (clk, d_f_seg, d_t_seg, wseg, sw[1:0], clkdiv[18:17], seg, an);
 
     wire [31:0] ram_a,d_f_ram, d_t_ram;
-    inst_mem_v MIOs (pc,inst, ram_a,d_f_ram,wram,d_t_ram);
+    inst_mem_v MIOs ( clk, pc,inst, ram_a,d_f_ram,wram,d_t_ram,led_num);
 
     mio_bus MIO0(   mem_a, d_t_mem, d_f_mem, wmem, rmem,
                     vga_a ,d_t_vga, d_f_vga, wvram,rvram,

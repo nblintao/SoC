@@ -9,7 +9,7 @@ module mio_seg(     input wire clk, // system clock
 
     reg [31:0] disp_num = 0;
     assign d_f_seg = disp_num;
-    always @(posedge wseg) begin
+    always @(negedge wseg) begin
         if (wseg) begin
             disp_num <= d_t_seg;
         end
