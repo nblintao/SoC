@@ -31,26 +31,22 @@ module BTN_Anti (   input wire clk, // system clock
     reg [9:0] direct;
     reg keydirection;
     
-    assign keybutton=|button;//只要button中有一个为1，keybutton就为1�
+    assign keybutton=|button;
 
     always@(posedge clk)
-        //没有按时keydirection�
         if (!keybutton)begin
             keydirection<=0;
             direct[9:5]<=button;
         end
-        //按下并当clkdiv[22:20]�00时，可以keydirection变为1
         else if(keybutton && clkdiv[num]&& clkdiv[num-1]==0 && clkdiv[num-2]==0)
             keydirection<=1;
     
     always@(negedge clk)
-        //按下并当clkdiv[22:20]�11，且keydirection�时按照实际检测情况输�
         if (button!=5'b00000 && clkdiv[num]==0 && clkdiv[num-1] && clkdiv[num-2] && keydirection==1)
         begin
             button_out<=button;
             direct[4:0]<=button;
         end
-        //当keydirection�时认为无按键按动
         else if(!keydirection)
             button_out<=0;
 

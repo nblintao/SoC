@@ -32,18 +32,11 @@ module top( input wire clk,
             output wire Hsync,
             output wire Vsync
             );
-wire [7:0] led_num;
-    assign Led[7:0] = led_num;
+
+    assign Led[7:0] = sw[7:0];
 
     wire [31:0] clkdiv;
     wire [4:0] btn_out;
-
-    // Infomation about switch
-    // sw[0]: text/graph swtich
-    // sw[1]: head/tail 16 bits
-    // sw[2]: slow/quick CPU
-
-    reg [31:0] num = 0;
 
     reg sys_clk = 1;
     always @(posedge clk) begin
@@ -51,8 +44,7 @@ wire [7:0] led_num;
     end
 
     BTN_Anti M1 (clk, clkdiv, btn, , btn_out, );
-    clk_div M2 (clk, 1'b0, sw[2], clkdiv, cpu_clk);
-    
+    clk_div M2 (clk, 1'b0, sw[2], clkdiv, cpu_clk);    
 
     wire clrn;
     assign clrn = ~btn_out[0];
@@ -69,20 +61,11 @@ wire [7:0] led_num;
     // cpu
     single_cycle_cpu_interrupt M0 (sys_clk, clrn, inst, d_f_mem, pc, mem_a, d_t_mem, wmem,rmem, 1'b0, 1'b0);
 
-
     wire [31:0] d_t_vga;
     wire [6:0] d_f_vga;
     wire [31:0] vga_a;
     wire [31:0] d_f_seg,d_t_seg;
-
-    mio_vga MIO1 (sys_clk,clrn,r,g,b,Hsync,Vsync,vga_clk,blankn,syncn,d_t_vga,vga_a,d_f_vga,wvram);
-
-    mio_ps2 MIO2 (sys_clk,clrn,PS2KeyboardClk,PS2KeyboardData,io_rdn,key_data,ready,overflow);
-
-    mio_seg MIO3 (clk, d_f_seg, d_t_seg, wseg, sw[1:0], clkdiv[18:17], seg, an);
-
     wire [31:0] ram_a,d_f_ram, d_t_ram;
-    inst_mem_v MIOs ( clk, pc,inst, ram_a,d_f_ram,wram,d_t_ram,led_num);
 
     mio_bus MIO0(   mem_a, d_t_mem, d_f_mem, wmem, rmem,
                     vga_a ,d_t_vga, d_f_vga, wvram,rvram,
@@ -91,8 +74,12 @@ wire [7:0] led_num;
                     ram_a,d_f_ram,wram,d_t_ram
                     );
 
-    always @(posedge ready) begin
-        num = num + 1;
-    end
+    mio_vga MIO1 (sys_clk,clrn,r,g,b,Hsync,Vsync,vga_clk,blankn,syncn,d_t_vga,vga_a,d_f_vga,wvram);
+
+    mio_ps2 MIO2 (sys_clk,clrn,PS2KeyboardClk,PS2KeyboardData,io_rdn,key_data,ready,overflow);
+
+    mio_seg MIO3 (clk, d_f_seg, d_t_seg, wseg, sw[1:0], clkdiv[18:17], seg, an);
+
+    mio_ram MIO4 (clk, pc,inst, ram_a,d_f_ram,wram,d_t_ram);
 
 endmodule

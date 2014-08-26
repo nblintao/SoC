@@ -1,4 +1,16 @@
-print '''module inst_mem_v (clk,a,inst,ram_a,d_f_ram,wram,d_t_ram,led_num);
+data = ''
+datain = raw_input()
+while datain!='':
+    if datain[0] == '0' or datain[0] == '1':
+        data += datain
+    datain = raw_input()
+data = data[:-1]
+data = data.split(',')
+
+# ram_depth <= 10
+ram_depth = 7
+
+print '''module mio_ram (clk,a,inst,ram_a,d_f_ram,wram,d_t_ram);
     input clk;
     input  [31:0] a;
     output [31:0] inst; 
@@ -6,35 +18,22 @@ print '''module inst_mem_v (clk,a,inst,ram_a,d_f_ram,wram,d_t_ram,led_num);
     output [31:0] d_f_ram;
     input         wram;
     input  [31:0] d_t_ram;
-    output reg [7:0] led_num;
 
-    initial led_num = 0;
-
-    reg   [31:0] ram [0:63];
-    assign inst = ram[a[7:2]];
-    assign d_f_ram = ram[ram_a[7:2]];
+    reg   [31:0] ram [0:%d];
+    assign inst = ram[a[%d:2]];
+    assign d_f_ram = ram[ram_a[%d:2]];
 
     always @(negedge clk)begin
         if(wram)begin
-            led_num = led_num + 1;
-            ram[ram_a[7:2]] <= d_t_ram;
+            ram[ram_a[%d:2]] <= d_t_ram;
         end
     end
-'''
-
-data = ''
-datain = raw_input()
-while datain!='':
-    data += datain
-    datain = raw_input()
+'''%(2**ram_depth-1, ram_depth+1, ram_depth+1, ram_depth+1)
 
 print '    initial begin'
 
-data = data.split(',')
-
-
-for x in xrange(0,64):
-    st = "        ram[6'h"
+for x in xrange(0,2**ram_depth):
+    st = "        ram[%d'h"%(ram_depth)
     st += '%02x'%(x)
     st += "] = 32'b"
     if(x<len(data)):
