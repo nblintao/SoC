@@ -8,7 +8,7 @@ data = data[:-1]
 data = data.split(',')
 
 # ram_depth <= 10
-ram_depth = 7
+ram_depth = 8
 
 print '''module mio_ram (clk,a,inst,ram_a,d_f_ram,wram,d_t_ram);
     input clk;

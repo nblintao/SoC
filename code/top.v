@@ -67,7 +67,7 @@ module top( input wire clk,
     wire [31:0] d_f_seg,d_t_seg;
     wire [31:0] ram_a,d_f_ram, d_t_ram;
 
-    mio_bus MIO0(   mem_a, d_t_mem, d_f_mem, wmem, rmem,
+    mio_bus MIO0(   clk, mem_a, d_t_mem, d_f_mem, wmem, rmem,
                     vga_a ,d_t_vga, d_f_vga, wvram,rvram,
                     io_rdn, ready, key_data,
                     d_f_seg, d_t_seg, wseg,
@@ -81,5 +81,6 @@ module top( input wire clk,
     mio_seg MIO3 (clk, d_f_seg, d_t_seg, wseg, sw[1:0], clkdiv[18:17], seg, an);
 
     mio_ram MIO4 (clk, pc,inst, ram_a,d_f_ram,wram,d_t_ram);
+
 
 endmodule

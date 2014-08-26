@@ -1,4 +1,5 @@
 module mio_bus(
+    input clk,
     input [31:0] mem_a,
     input [31:0] d_t_mem,
     output [31:0] d_f_mem,
@@ -57,14 +58,29 @@ module mio_bus(
     assign ram_a = mem_a;
     assign wram = wmem & ram_space;
     assign d_t_ram = d_t_mem;
+
+    //****************************************
+    // cursor     space: 0000_1000 - 0000_1001
+    wire cursor_row_space    = (mem_a[31:0] == 32'h00001000);
+    wire cursor_column_space = (mem_a[31:0] == 32'h00001001);
+    reg [31:0] cursor_row, cursor_column;
+    initial cursor_row    = 0;
+    initial cursor_column = 0;
+    always @(negedge clk) begin
+        if (wmem & cursor_row_space)
+            cursor_row    <= d_t_mem;
+        else if(wmem & cursor_column_space)
+            cursor_column <= d_t_mem;
+    end
     
     assign d_f_mem = 
         vr_space ? {25'h0,d_f_vga} :
         io_space ? {23'h0,ready,key_data} :
         segment_space ? d_f_seg:
         ram_space ? d_f_ram:
+        cursor_row_space ? cursor_row:
+        cursor_column_space ? cursor_column:
         32'h0 ;
-    // assign d_f_mem = io_rdn? {25'h0,d_f_vga} : {23'h0,ready,key_data};
 
 
 endmodule
