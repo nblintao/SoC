@@ -10,30 +10,33 @@ data = data.split(',')
 # ram_depth <= 10
 ram_depth = 8
 
-print '''module mio_ram (clk,a,inst,ram_a,d_f_ram,wram,d_t_ram);
-    input clk;
+print '//data length is %d'%(len(data))
+if len(data) <= 64:
+    ram_depth = 6
+elif len(data) <= 128:
+    ram_depth = 7
+elif len(data) <= 256
+    ram_depth = 8
+else
+    pass
+
+print 
+
+print '''module mio_rom (a, inst, rom_a, d_f_rom);
     input  [31:0] a;
     output [31:0] inst; 
-    input  [31:0] ram_a;
-    output [31:0] d_f_ram;
-    input         wram;
-    input  [31:0] d_t_ram;
+    input  [31:0] rom_a;
+    output [31:0] d_f_rom;
 
-    reg   [31:0] ram [0:%d];
-    assign inst = ram[a[%d:2]];
-    assign d_f_ram = ram[ram_a[%d:2]];
+    wire   [31:0] rom [0:%d];
+    assign inst    = rom[a[%d:2]];
+    assign d_f_rom = rom[rom_a[%d:2]];
+'''%(2**ram_depth-1, ram_depth+1, ram_depth+1)
 
-    always @(negedge clk)begin
-        if(wram)begin
-            ram[ram_a[%d:2]] <= d_t_ram;
-        end
-    end
-'''%(2**ram_depth-1, ram_depth+1, ram_depth+1, ram_depth+1)
-
-print '    initial begin'
+#print '    initial begin'
 
 for x in xrange(0,2**ram_depth):
-    st = "        ram[%d'h"%(ram_depth)
+    st = "    assign rom[%d'h"%(ram_depth)
     st += '%02x'%(x)
     st += "] = 32'b"
     if(x<len(data)):
@@ -43,5 +46,5 @@ for x in xrange(0,2**ram_depth):
     st+=';'
     print st
 
-print '    end'
+#print '    end'
 print 'endmodule'

@@ -20,10 +20,13 @@ module mio_bus(
     output [31:0] d_t_seg,
     output wseg,
 
-    output [31:0] ram_a,
-    input [31:0] d_f_ram,
-    output wram,
-    output [31:0] d_t_ram
+    output  [31:0]  rom_a,
+    input   [31:0]  d_f_rom,
+
+    output  [5:0]   ram_a,
+    input   [31:0]  d_f_ram,
+    output  wram,
+    output  [31:0]  d_t_ram
     );
 
     // assign write   =   wmem & ~io_space & ~vr_space; // not io not vr
@@ -39,8 +42,8 @@ module mio_bus(
 
     //****************************************
     // i/o        space: a000_0000 - bfff_ffff
-    wire io_space = mem_a[31] & ~mem_a[30] & mem_a[29]; 
-    assign io_rdn  = ~(rmem & io_space); // i/o read, active low   
+    wire io_space = mem_a[31] & ~mem_a[30] & mem_a[29];
+    assign io_rdn  = ~(rmem & io_space); // i/o read, active low  
 
 
     //****************************************
@@ -52,34 +55,53 @@ module mio_bus(
     wire segment_space = (mem_a[31:4] == 28'h00007f1);
     assign d_t_seg = d_t_mem;
     assign wseg = wmem & segment_space;
+
+
     //****************************************
-    // ram        space: 0000_0000 - 0000_0fff
-    wire ram_space = (mem_a[31:12] == 20'h0);
-    assign ram_a = mem_a;
+    // rom        space: 0000_0000 - 0000_07ff
+    wire rom_space = (mem_a[31:11] == 21'h0);
+    assign rom_a = mem_a;
+
+    //****************************************
+    // ram        space: 0000_0800 - 0000_0fff
+    wire ram_space = (mem_a[31:11] == 21'h1);
+    assign ram_a = mem_a[7:2];
     assign wram = wmem & ram_space;
     assign d_t_ram = d_t_mem;
 
     //****************************************
     // cursor     space: 0000_1000 - 0000_1001
-    wire cursor_row_space    = (mem_a[31:0] == 32'h00001000);
-    wire cursor_column_space = (mem_a[31:0] == 32'h00001001);
-    reg [31:0] cursor_row, cursor_column;
-    initial cursor_row    = 0;
-    initial cursor_column = 0;
+    wire cursor_row_space       = (mem_a[31:0] == 32'h00001000);
+    reg [31:0] cursor_row = 0; 
     always @(negedge clk) begin
         if (wmem & cursor_row_space)
             cursor_row    <= d_t_mem;
-        else if(wmem & cursor_column_space)
-            cursor_column <= d_t_mem;
+    end
+    wire cursor_column_space    = (mem_a[31:0] == 32'h00001001);
+    reg [31:0] cursor_column = 0; 
+    always @(negedge clk) begin
+        if (wmem & cursor_column_space)
+            cursor_column    <= d_t_mem;
+    end
+
+    //****************************************
+    // keyboard   space: 0000_1002 - 0000_1007
+    wire keyboard_f0_space      = (mem_a[31:0] == 32'h00001002);
+    reg [31:0] keyboard_f0 = 0; 
+    always @(negedge clk) begin
+        if (wmem & keyboard_f0_space)
+            keyboard_f0    <= d_t_mem;
     end
     
     assign d_f_mem = 
         vr_space ? {25'h0,d_f_vga} :
         io_space ? {23'h0,ready,key_data} :
         segment_space ? d_f_seg:
+        rom_space ? d_f_rom:
         ram_space ? d_f_ram:
         cursor_row_space ? cursor_row:
         cursor_column_space ? cursor_column:
+        keyboard_f0_space ? keyboard_f0:
         32'h0 ;
 
 

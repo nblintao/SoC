@@ -1,7 +1,7 @@
 .text
 
 main:
-    addi    $sp,    $zero,  512     # 0000_0200   ram_depth = 7
+    addi    $sp,    $zero,  SP
     #input_char
 input_char:
     li      $t0,    PS2_A
@@ -20,7 +20,7 @@ print_keybord:
 # $a0 : data form keybord 0x0000_01XX
     addi    $sp,    $sp,    -4
     sw      $ra,    0($sp)
-    la      $t0,    F0_done     # $t0 = addr(F0_done)
+    addi    $t0,    $zero,  F0_done     # $t0 = addr(F0_done)
     lw      $t1,    0($t0)      # $t1 = F0_done
     bne     $t1,    $zero,  print_keybord_f0before  # F0_done != 0
     li      $t1,    0x000001F0
@@ -101,7 +101,7 @@ print_keybord_backspace_regular:
     add     $t0,    $t0,    $t2
     sll     $t2,    $t1,    4
     add     $t0,    $t0,    $t2
-    sll     $t0,    $t0,    2       # position * 4
+    # sll     $t0,    $t0,    2       # position * 4
     li      $t1,    VGA_A
     add     $t0,    $t0,    $t1
     add     $a0,    $zero,  $zero
@@ -195,7 +195,7 @@ print_char:
     sll     $t2,    $t1,    4
     add     $t3,    $t3,    $t2
     add     $t3,    $t3,    $t0
-    sll     $t3,    $t3,    2       # position * 4
+    # sll     $t3,    $t3,    2       # position * 4
     li      $t4,    VGA_A
     add     $t3,    $t3,    $t4
     sw      $a0,    0($t3)
@@ -220,8 +220,7 @@ end:
     j       end
 
 .data
-F0_done:
-    .word   0
+
 SCAN_CODE:
     .word   0x1C322123  # A B C D
     .word   0x242B3433  # E F G H
@@ -238,13 +237,11 @@ SCAN_CODE:
     # .word   0x  # 
 SCAN_CODE_END:
 
-
+`define     SP          0x00001000
 `define     VGA_A       0xC0000000
 # `define     VGA_A       0x0000F000
 `define     PS2_A       0xA0000000
 `define     SEG_A       0x00007F10
 `define     CURSOR_ROW  0x00001000
 `define     CURSOR_COL  0x00001001
-
-
-
+`define     F0_done     0x00001002
