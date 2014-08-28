@@ -92,6 +92,20 @@ module mio_bus(
         if (wmem & keyboard_f0_space)
             keyboard_f0    <= d_t_mem;
     end
+
+    //****************************************
+    // timer      space: 0000_1008 - 0000_100f
+    wire timer_25Hz_space       = (mem_a[31:0] == 32'h00001008);
+    reg [31:0] timer_25Hz = 0;
+    always @(posedge clk)begin // 100MHz/25Hz = 4M
+        // if (timer_25Hz == 32'd4000000) begin
+        if (timer_25Hz == 32'd62500) begin
+            timer_25Hz <= 0;
+        end
+        else begin
+            timer_25Hz <= timer_25Hz + 1;
+        end
+    end
     
     assign d_f_mem = 
         vr_space ? {25'h0,d_f_vga} :
@@ -102,6 +116,7 @@ module mio_bus(
         cursor_row_space ? cursor_row:
         cursor_column_space ? cursor_column:
         keyboard_f0_space ? keyboard_f0:
+        timer_25Hz_space ? timer_25Hz:
         32'h0 ;
 
 

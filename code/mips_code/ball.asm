@@ -3,12 +3,13 @@
 main:
     addi    $sp,    $zero,  SP
     addi    $sp,    $sp,    -16
-    sw      $zero,  12($sp)     # row
-    sw      $zero,  8($sp)      # column
-    sw      $zero,  4($sp)      # speed
-    sw      $zero,  0($sp)      # count
+    sw      $zero,  0($sp)          # row
+    sw      $zero,  4($sp)          # column
+    addi    $t0,    $zero,  50
+    sw      $t0,    8($sp)          # speed: 50 counts / grid
+    sw      $t0,    12($sp)         # count
 
-    addi    $t0,    $t0,    BALL
+    addi    $t0,    $zero,   BALL
     li      $t1,    VGA_A
     sw      $t0,    0($t1)
 
@@ -28,8 +29,39 @@ polling:
     #others
     j       polling
 
-timer:
+timer_step:
 # $a1 : address of row, column, speed, count data
+    lw      $t0,    12($a1)     # count
+    beq     $t0,    $zero,  move_grid
+    addi    $t0,    $t0,    -1  # count--
+    sw      $t0,    12($a1)     # update count
+    jr      $ra
+move_grid:
+    lw      $t0,    8($a1)      # speed
+    sw      $t0,    12($a1)     # count = speed
+
+    addi    $sp,    $sp,    -12
+    sw      $a0,    0($sp)
+    sw      $a1,    4($sp)
+    sw      $ra,    8($sp)
+
+    move    $t0,    $a1     # address of row, column data
+
+    lw      $a0,    0($t0)  # row
+    lw      $a1,    4($t0)  # column
+    jal     move_right
+
+    lw      $a0,    0($sp)
+    lw      $a1,    4($sp)
+    lw      $ra,    8($sp)
+    addi    $sp,    $sp,    812
+
+    sw      $v0,    0($a1)
+    sw      $v1,    4($a1)
+
+
+    jr      $ra
+
     
 
 
@@ -116,17 +148,17 @@ end:
 .data
 
 SCAN_CODE:
-    .word   0x1C322123  # A B C D
-    .word   0x242B3433  # E F G H
-    .word   0x433B424B  # I J K L
-    .word   0x3A31444D  # M N O P
-    .word   0x152D1B2C  # Q R S T
-    .word   0x3C2A1D22  # U V W X
-    .word   0x351A4516  # Y Z 0 1
-    .word   0x1E26252E  # 2 3 4 5
-    .word   0x363D3E46  # 6 7 8 9
-    .word   0x29665A59  # space backspace enter shift(only right)
-    .word   0x756B7274  # U L D R
+    # .word   0x1C322123  # A B C D
+    # .word   0x242B3433  # E F G H
+    # .word   0x433B424B  # I J K L
+    # .word   0x3A31444D  # M N O P
+    # .word   0x152D1B2C  # Q R S T
+    # .word   0x3C2A1D22  # U V W X
+    # .word   0x351A4516  # Y Z 0 1
+    # .word   0x1E26252E  # 2 3 4 5
+    # .word   0x363D3E46  # 6 7 8 9
+    # .word   0x29665A59  # space backspace enter shift(only right)
+    # .word   0x756B7274  # U L D R
     # .word   0x  # 
     # .word   0x  # 
 SCAN_CODE_END:
