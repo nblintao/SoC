@@ -10,17 +10,23 @@ data = data.split(',')
 # ram_depth <= 10
 ram_depth = 8
 
-print '//data length is %d'%(len(data))
-if len(data) <= 64:
+print '// data length is %d'%(len(data))
+if len(data) <= 8:
+    ram_depth = 3
+elif len(data) <= 16:
+    ram_depth = 4    
+elif len(data) <= 32:
+    ram_depth = 5
+elif len(data) <= 64:
     ram_depth = 6
 elif len(data) <= 128:
     ram_depth = 7
-elif len(data) <= 256
+elif len(data) <= 256:
     ram_depth = 8
-else
+else:
     pass
 
-print 
+print '// ram depth is %d'%(ram_depth)
 
 print '''module mio_rom (a, inst, rom_a, d_f_rom);
     input  [31:0] a;

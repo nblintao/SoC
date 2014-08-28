@@ -1,23 +1,3 @@
-`timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date:    13:52:56 08/22/2014 
-// Design Name: 
-// Module Name:    font_table 
-// Project Name: 
-// Target Devices: 
-// Tool versions: 
-// Description: 
-//
-// Dependencies: 
-//
-// Revision: 
-// Revision 0.01 - File Created
-// Additional Comments: 
-//
-//////////////////////////////////////////////////////////////////////////////////
 module font_table (a,d);
     input  [12:0] a; // 8*8*128=2^3*2^3*2^7
     output        d; // font dot
@@ -2010,66 +1990,66 @@ module font_table (a,d);
     assign rom[13'h07bf] = 0;
     assign rom[13'h07c0] = 0;
     assign rom[13'h07c1] = 0;
-    assign rom[13'h07c2] = 0;
-    assign rom[13'h07c3] = 0;
-    assign rom[13'h07c4] = 0;
-    assign rom[13'h07c5] = 0;
+    assign rom[13'h07c2] = 1;
+    assign rom[13'h07c3] = 1;
+    assign rom[13'h07c4] = 1;
+    assign rom[13'h07c5] = 1;
     assign rom[13'h07c6] = 0;
     assign rom[13'h07c7] = 0;
     assign rom[13'h07c8] = 0;
-    assign rom[13'h07c9] = 0;
-    assign rom[13'h07ca] = 0;
-    assign rom[13'h07cb] = 0;
-    assign rom[13'h07cc] = 0;
-    assign rom[13'h07cd] = 0;
-    assign rom[13'h07ce] = 0;
+    assign rom[13'h07c9] = 1;
+    assign rom[13'h07ca] = 1;
+    assign rom[13'h07cb] = 1;
+    assign rom[13'h07cc] = 1;
+    assign rom[13'h07cd] = 1;
+    assign rom[13'h07ce] = 1;
     assign rom[13'h07cf] = 0;
-    assign rom[13'h07d0] = 0;
-    assign rom[13'h07d1] = 0;
-    assign rom[13'h07d2] = 0;
-    assign rom[13'h07d3] = 0;
-    assign rom[13'h07d4] = 0;
-    assign rom[13'h07d5] = 0;
-    assign rom[13'h07d6] = 0;
-    assign rom[13'h07d7] = 0;
-    assign rom[13'h07d8] = 0;
-    assign rom[13'h07d9] = 0;
-    assign rom[13'h07da] = 0;
-    assign rom[13'h07db] = 0;
-    assign rom[13'h07dc] = 0;
-    assign rom[13'h07dd] = 0;
-    assign rom[13'h07de] = 0;
-    assign rom[13'h07df] = 0;
-    assign rom[13'h07e0] = 0;
-    assign rom[13'h07e1] = 0;
-    assign rom[13'h07e2] = 0;
-    assign rom[13'h07e3] = 0;
-    assign rom[13'h07e4] = 0;
-    assign rom[13'h07e5] = 0;
-    assign rom[13'h07e6] = 0;
-    assign rom[13'h07e7] = 0;
-    assign rom[13'h07e8] = 0;
-    assign rom[13'h07e9] = 0;
-    assign rom[13'h07ea] = 0;
-    assign rom[13'h07eb] = 0;
-    assign rom[13'h07ec] = 0;
-    assign rom[13'h07ed] = 0;
-    assign rom[13'h07ee] = 0;
-    assign rom[13'h07ef] = 0;
+    assign rom[13'h07d0] = 1;
+    assign rom[13'h07d1] = 1;
+    assign rom[13'h07d2] = 1;
+    assign rom[13'h07d3] = 1;
+    assign rom[13'h07d4] = 1;
+    assign rom[13'h07d5] = 1;
+    assign rom[13'h07d6] = 1;
+    assign rom[13'h07d7] = 1;
+    assign rom[13'h07d8] = 1;
+    assign rom[13'h07d9] = 1;
+    assign rom[13'h07da] = 1;
+    assign rom[13'h07db] = 1;
+    assign rom[13'h07dc] = 1;
+    assign rom[13'h07dd] = 1;
+    assign rom[13'h07de] = 1;
+    assign rom[13'h07df] = 1;
+    assign rom[13'h07e0] = 1;
+    assign rom[13'h07e1] = 1;
+    assign rom[13'h07e2] = 1;
+    assign rom[13'h07e3] = 1;
+    assign rom[13'h07e4] = 1;
+    assign rom[13'h07e5] = 1;
+    assign rom[13'h07e6] = 1;
+    assign rom[13'h07e7] = 1;
+    assign rom[13'h07e8] = 1;
+    assign rom[13'h07e9] = 1;
+    assign rom[13'h07ea] = 1;
+    assign rom[13'h07eb] = 1;
+    assign rom[13'h07ec] = 1;
+    assign rom[13'h07ed] = 1;
+    assign rom[13'h07ee] = 1;
+    assign rom[13'h07ef] = 1;
     assign rom[13'h07f0] = 0;
-    assign rom[13'h07f1] = 0;
-    assign rom[13'h07f2] = 0;
-    assign rom[13'h07f3] = 0;
-    assign rom[13'h07f4] = 0;
-    assign rom[13'h07f5] = 0;
-    assign rom[13'h07f6] = 0;
+    assign rom[13'h07f1] = 1;
+    assign rom[13'h07f2] = 1;
+    assign rom[13'h07f3] = 1;
+    assign rom[13'h07f4] = 1;
+    assign rom[13'h07f5] = 1;
+    assign rom[13'h07f6] = 1;
     assign rom[13'h07f7] = 0;
     assign rom[13'h07f8] = 0;
     assign rom[13'h07f9] = 0;
-    assign rom[13'h07fa] = 0;
-    assign rom[13'h07fb] = 0;
-    assign rom[13'h07fc] = 0;
-    assign rom[13'h07fd] = 0;
+    assign rom[13'h07fa] = 1;
+    assign rom[13'h07fb] = 1;
+    assign rom[13'h07fc] = 1;
+    assign rom[13'h07fd] = 1;
     assign rom[13'h07fe] = 0;
     assign rom[13'h07ff] = 0;
     assign rom[13'h0800] = 0;
@@ -8217,4 +8197,3 @@ module font_table (a,d);
     assign rom[13'h1ffe] = 1;
     assign rom[13'h1fff] = 1;
 endmodule
-

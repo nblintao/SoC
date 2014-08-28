@@ -77,7 +77,7 @@ module top( input wire clk,
                     ram_a, d_f_ram, wram, d_t_ram
                     );
 
-    mio_vga MIO1 (sys_clk,clrn,r,g,b,Hsync,Vsync,vga_clk,blankn,syncn,d_t_vga,vga_a,d_f_vga,wvram);
+    mio_vga MIO1 (sys_clk, clrn,r,g,b,Hsync,Vsync,vga_clk,blankn,syncn,d_t_vga,vga_a,d_f_vga,wvram);
 
     mio_ps2 MIO2 (sys_clk,clrn,PS2KeyboardClk,PS2KeyboardData,io_rdn,key_data,ready,overflow);
 
@@ -86,7 +86,7 @@ module top( input wire clk,
     mio_rom MIO4 (pc, inst, rom_a, d_f_rom);
 
     // single port ram -- width: 32,  depth: 64
-    mio_ram MIO5 (~sys_clk, wram, ram_a, d_t_ram, d_f_ram);
+    mio_ram MIO5 (~clk, wram, ram_a, d_t_ram, d_f_ram);
 
 
 endmodule

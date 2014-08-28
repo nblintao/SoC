@@ -1,0 +1,1 @@
+font_generator.exe > ../font_table.v
