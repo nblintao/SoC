@@ -8,12 +8,12 @@ main:
     sw      $zero,  0($sp)          # row
     sw      $zero,  4($sp)          # column
     # horizontal
-    addi    $t0,    $zero,  50
+    addi    $t0,    $zero,  5
     sw      $t0,    8($sp)          # speed(counts / grid)
     sw      $t0,    12($sp)         # count
     sw      $zero,  16($sp)         # direction: 0
     # vertical
-    addi    $t0,    $zero,  20
+    addi    $t0,    $zero,  2
     sw      $t0,    20($sp)         # speed(counts / grid)
     sw      $t0,    24($sp)         # count
     sw      $zero,  28($sp)         # direction: 0
@@ -28,18 +28,20 @@ polling:
     li      $t0,    PS2_A
     lw      $s0,    0($t0)
     andi    $t0,    $s0,    256
-    beq     $t0,    $zero,  2           # $s0[8] != ready
+    beq     $t0,    $zero,  timer       # $s0[8] != ready
     move    $a0,    $s0
     add     $a1,    $zero,  $sp         # save address of row, column, speed, count data    
     jal     print_keybord
     # timer
+timer:
     lw      $t0,    TIMER($zero)
-    bne     $t0,    $zero,  timer_end  
+    beq     $t0,    $zero,  timer_end
+    sw      $zero,  TIMER($zero)
     add     $a1,    $zero,  $sp
-    jal     timer_step_h
+    # jal     timer_step_h
     add     $a1,    $zero,  $sp
-    #jal     timer_step_v
-    #others
+    jal     timer_step_v
+    # others
 timer_end:
     j       polling
 
@@ -140,7 +142,7 @@ move_grid_v:
 #   if row == 59 and direction(row) == 0:
 #       direction(row) = - direction(row)
     addi    $t1,    $zero,  59
-    bne     $t1,    $t3,    move_grid_v_or2
+    bne     $t1,    $t2,    move_grid_v_or2
     bne     $t4,    $zero,  move_grid_v_or2   # direction != 0
     addi    $t4,    $zero,  1
     sw      $t4,    28($a1)          # update direction
@@ -150,7 +152,7 @@ move_grid_v:
 #       direction(row) = - direction(row)
 move_grid_v_or2:
     addi    $t1,    $zero,  0
-    bne     $t1,    $t3,    move_grid_v_real
+    bne     $t1,    $t2,    move_grid_v_real
     beq     $t4,    $zero,  move_grid_v_real  # direction == 0
     addi    $t4,    $zero,  0
     sw      $t4,    28($a1)          # update direction
