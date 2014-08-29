@@ -99,9 +99,10 @@ module mio_bus(
     reg [31:0] timer_25Hz = 0;
     always @(posedge clk)begin // 100MHz/25Hz = 4M
         // if (timer_25Hz == 32'd4000000) begin
-        if (timer_25Hz == 32'd100000) begin
+        // if (timer_25Hz == 32'd100000) begin
         // if (timer_25Hz == 32'd62500) begin
         // if (timer_25Hz == 32'd625000) begin
+        // if (timer_25Hz == 32'd125000) begin
             timer_25Hz <= 0;
         end
         else begin
