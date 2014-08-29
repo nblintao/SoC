@@ -1,6 +1,13 @@
 .text
 
 main:
+
+# addi    $t0,    $zero,  1
+# addi     $t0,    $zero,  $t0
+
+# slt     $t0,    $t0,    $zero
+# beq     $t0,    $zero,  main
+
     addi    $sp,    $zero,  SP
     addi    $sp,    $sp,    -20
     sw      $zero,  0($sp)          # row
@@ -8,8 +15,10 @@ main:
     addi    $t0,    $zero,  50
     sw      $t0,    8($sp)          # speed: 50 counts / grid
     sw      $t0,    12($sp)         # count
-    addi    $t0,    $zero,  1
-    sw      $t0,    16($sp)         # direction: +1
+
+    sw      $zero,  16($sp)         # direction: 0
+    # addi    $t0,    $zero,  1
+    # sw      $t0,    16($sp)
 
     addi    $t0,    $zero,   BALL
     li      $t1,    VGA_A
@@ -19,8 +28,8 @@ polling:
     add     $a1,    $zero,  $sp         # save address of row, column, speed, count data
     # keybord
     li      $t0,    PS2_A
-    lw      $s0,    0($t0) 
-    andi    $t0,    $s0,    256     
+    lw      $s0,    0($t0)
+    andi    $t0,    $s0,    256
     beq     $t0,    $zero,  2           # $s0[8] != ready
     move    $a0,    $s0
     jal     print_keybord
@@ -32,6 +41,11 @@ polling:
     j       polling
 
 timer_step:
+# lw      $t0,    SEG_A($zero)
+# addi    $t0,    $t0,    1
+# sw      $t0,    SEG_A($zero)
+
+
 # $a1 : address of row, column, speed, count data
     lw      $t0,    12($a1)     # count
     beq     $t0,    $zero,  move_grid
@@ -40,31 +54,50 @@ timer_step:
     jr      $ra
 move_grid:
     lw      $t0,    8($a1)      # speed
-    sw      $t0,    12($a1)     # count = speed
+    sw      $t0,    12($a1)     # count = speed - 1
 
     lw      $t2,    0($a1)  # row
     lw      $t3,    4($a1)  # column
     lw      $t4,    16($a1) # direction
 
-# #   if column == 79 and direction(column) == 1:
-# #       direction(column) = - direction(column)
-#     addi    $t1,    $zero,  79
-#     bne     $t1,    $t3,    move_grid_or2
-#     slt     $t1,    $zero,  $t0     # direction > 0
-#     beq     $t1,    $zero,  move_grid_or2
-#     sub     $t0,    $zero,  $t0
-#     sw      $t0,    8($a1)
-#     j       move_grid_exit
+#   if column == 79 and direction(column) == 0:
+#       direction(column) = - direction(column)
+    addi    $t1,    $zero,  79
+    bne     $t1,    $t3,    move_grid_or2
 
-# #   elif column == 0 and direction(column) < 0 :
-# #       direction(column) = - direction(column)
-# move_grid_or2:
-#     addi    $t1,    $zero,  0
-#     bne     $t1,    $t3,    move_grid_real
-#     slt     $t1,    $zero,  $t0     # direction < 0
-#     beq     $t1,    $zero,  move_grid_or2
-#     sub     $t0,    $zero,  $t0
-#     sw      $t0,    8($a1)
+    # slt     $t1,    $zero,  $t4     # direction > 0
+    # beq     $t1,    $zero,  move_grid_or2
+    bne     $t4,    $zero,  move_grid_or2   # direction != 0
+    
+    # j       move_grid_change_direction
+
+    addi    $t4,    $zero,  1
+    sw      $t4,    16($a1)          # update direction
+    j       move_grid_exit
+
+
+#   elif column == 0 and direction(column) == 1:
+#       direction(column) = - direction(column)
+move_grid_or2:
+    addi    $t1,    $zero,  0
+    bne     $t1,    $t3,    move_grid_real
+
+    # slt     $t1,    $t4,    $zero   # direction < 0
+    # beq     $t1,    $zero,  move_grid_real
+    beq     $t4,    $zero,  move_grid_real  # direction == 0
+
+    addi    $t4,    $zero,  0
+    sw      $t4,    16($a1)          # update direction
+    j       move_grid_exit
+
+# move_grid_change_direction:
+#     # addi    $t5,    $zero,  1
+#     # sub     $t4,    $t5,  $t4
+#     addi    $t4, $zero,1
+
+#     # sub     $t4,    $zero,  $t4
+
+#     sw      $t4,    16($a1)          # update direction
 #     j       move_grid_exit
     
 
@@ -80,8 +113,10 @@ move_grid_real:
     move    $a0,    $t2     # row
     move    $a1,    $t3     # column
 
-    slt     $t5,    $zero,  $t4     # speed > 0
-    beq     $t5,    $zero,  move_grid_left
+    # slt     $t5,    $zero,  $t4     # speed > 0
+    # beq     $t5,    $zero,  move_grid_left
+    bne     $t4,    $zero,  move_grid_left  # direction != 0
+
     jal     move_right
     j       move_grid_left_over
 move_grid_left:

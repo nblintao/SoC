@@ -23,7 +23,9 @@ elif len(data) <= 128:
     ram_depth = 7
 elif len(data) <= 256:
     ram_depth = 8
-else:
+elif len(data) <= 512:
+    ram_depth = 9    
+else :
     pass
 
 print '// ram depth is %d'%(ram_depth)
