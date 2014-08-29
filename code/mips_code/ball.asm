@@ -3,24 +3,66 @@
 main:
 
     addi    $sp,    $zero,  SP
-    addi    $sp,    $sp,    -32
 
+
+# bar
+    addi    $sp,    $sp,    -8
+    # 0~59    28|29|30|31
+    addi    $t0,    $zero,  28
+    sw      $t0,    0($sp)
+    addi    $t0,    $zero,  31
+    sw      $t0,    4($sp)
+
+    addi    $t0,    $zero,  28
+    addi    $t2,    $zero,  BAR    
+    
+    li      $t3,    VGA_A
+    addi    $t3,    $t3,    18880   # 59 * 80 * 4 = 18880
+    addi    $t3,    $t3,    112     # 28 * 4 = 112
+bar_foo:
+    sw      $t2,    0($t3)    
+    addi    $t0,    $t0,    1
+    addi    $t3,    $t3,    4
+    slti    $t1,    $t0,    32
+    bne     $t1,    $zero,  bar_foo
+
+# ball-1
+    addi    $sp,    $sp,    -32
     sw      $zero,  0($sp)          # row
     sw      $zero,  4($sp)          # column
     # horizontal
-    addi    $t0,    $zero,  50
+    addi    $t0,    $zero,  5
     sw      $t0,    8($sp)          # speed(counts / grid)
     sw      $t0,    12($sp)         # count
     sw      $zero,  16($sp)         # direction: 0
     # vertical
-    addi    $t0,    $zero,  20
+    addi    $t0,    $zero,  2
     sw      $t0,    20($sp)         # speed(counts / grid)
     sw      $t0,    24($sp)         # count
     sw      $zero,  28($sp)         # direction: 0
-
     addi    $t0,    $zero,   BALL
     li      $t1,    VGA_A
     sw      $t0,    0($t1)
+
+# ball-2
+    addi    $sp,    $sp,    -32
+    addi    $t0,    $zero,  10
+    sw      $t0,    0($sp)          # row
+    sw      $zero,  4($sp)          # column
+    # horizontal
+    addi    $t0,    $zero,  7
+    sw      $t0,    8($sp)          # speed(counts / grid)
+    sw      $t0,    12($sp)         # count
+    sw      $zero,  16($sp)         # direction: 0
+    # vertical
+    addi    $t0,    $zero,  3
+    sw      $t0,    20($sp)         # speed(counts / grid)
+    sw      $t0,    24($sp)         # count
+    sw      $zero,  28($sp)         # direction: 0
+    addi    $t0,    $zero,   BALL
+    li      $t1,    VGA_A
+    sw      $t0,    0($t1)
+
 
 polling:  
 
@@ -28,21 +70,26 @@ polling:
     li      $t0,    PS2_A
     lw      $s0,    0($t0)
     andi    $t0,    $s0,    256
-    beq     $t0,    $zero,  2           # $s0[8] != ready
+    beq     $t0,    $zero,  timer       # $s0[8] != ready
     move    $a0,    $s0
     add     $a1,    $zero,  $sp         # save address of row, column, speed, count data    
     jal     print_keybord
     # timer
+timer:
     lw      $t0,    TIMER($zero)
-    bne     $t0,    $zero,  timer_end  
-    add     $a1,    $zero,  $sp
+    beq     $t0,    $zero,  timer_end
+    sw      $zero,  TIMER($zero)
+
+    addi    $a1,    $sp,    0
     jal     timer_step_h
-    add     $a1,    $zero,  $sp
-    #jal     timer_step_v
-    #others
+    addi    $a1,    $sp,    0
+    jal     timer_step_v
+    addi    $a1,    $sp,    32
+    jal     timer_step_h
+    addi    $a1,    $sp,    32
+    jal     timer_step_v
 timer_end:
     j       polling
-
 
 
 ################################
@@ -137,10 +184,10 @@ move_grid_v:
     lw      $t3,    4($a1)  # column
     lw      $t4,    28($a1) # direction
 
-#   if row == 59 and direction(row) == 0:
+#   if row == 58 and direction(row) == 0:
 #       direction(row) = - direction(row)
-    addi    $t1,    $zero,  59
-    bne     $t1,    $t3,    move_grid_v_or2
+    addi    $t1,    $zero,  58
+    bne     $t1,    $t2,    move_grid_v_or2
     bne     $t4,    $zero,  move_grid_v_or2   # direction != 0
     addi    $t4,    $zero,  1
     sw      $t4,    28($a1)          # update direction
@@ -150,7 +197,7 @@ move_grid_v:
 #       direction(row) = - direction(row)
 move_grid_v_or2:
     addi    $t1,    $zero,  0
-    bne     $t1,    $t3,    move_grid_v_real
+    bne     $t1,    $t2,    move_grid_v_real
     beq     $t4,    $zero,  move_grid_v_real  # direction == 0
     addi    $t4,    $zero,  0
     sw      $t4,    28($a1)          # update direction
@@ -261,7 +308,10 @@ move_right:
     sll     $t0,    $t0,    2
     li      $t1,    VGA_A           # $t1 = $t0 + VGA_A
     add     $t1,    $t1,    $t0
-    lw      $t2,    0($t1)          # $t2 = ascii
+    
+    # lw      $t2,    0($t1)          # $t2 = ascii
+    addi    $t2,    $zero,  BALL
+
     sw      $zero,  0($t1)          # clear the original position
     addi    $v0,    $a0,    0       # CHANGE! new row
     addi    $v1,    $a1,    1       # CHANGE! new column
@@ -281,7 +331,10 @@ move_left:
     sll     $t0,    $t0,    2
     li      $t1,    VGA_A           # $t1 = $t0 + VGA_A
     add     $t1,    $t1,    $t0
-    lw      $t2,    0($t1)          # $t2 = ascii
+    
+    # lw      $t2,    0($t1)          # $t2 = ascii
+    addi    $t2,    $zero,  BALL
+
     sw      $zero,  0($t1)          # clear the original position
     addi    $v0,    $a0,    0       # CHANGE! new row
     addi    $v1,    $a1,    -1      # CHANGE! new column
@@ -302,7 +355,10 @@ move_down:
     sll     $t0,    $t0,    2
     li      $t1,    VGA_A           # $t1 = $t0 + VGA_A
     add     $t1,    $t1,    $t0
-    lw      $t2,    0($t1)          # $t2 = ascii
+    
+    # lw      $t2,    0($t1)          # $t2 = ascii
+    addi    $t2,    $zero,  BALL
+
     sw      $zero,  0($t1)          # clear the original position
     addi    $v0,    $a0,    1       # CHANGE! new row
     addi    $v1,    $a1,    0       # CHANGE! new column
@@ -323,7 +379,10 @@ move_up:
     sll     $t0,    $t0,    2
     li      $t1,    VGA_A           # $t1 = $t0 + VGA_A
     add     $t1,    $t1,    $t0
-    lw      $t2,    0($t1)          # $t2 = ascii
+    
+    # lw      $t2,    0($t1)          # $t2 = ascii
+    addi    $t2,    $zero,  BALL
+
     sw      $zero,  0($t1)          # clear the original position
     addi    $v0,    $a0,    -1      # CHANGE! new row
     addi    $v1,    $a1,    0       # CHANGE! new column
@@ -364,3 +423,4 @@ SCAN_CODE_END:
 `define     F0_done     0x00001002
 `define     TIMER       0x00001008
 `define     BALL        0x1f
+`define     BAR         0x7f

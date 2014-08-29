@@ -59,7 +59,7 @@ module top( input wire clk,
     wire [7:0] key_data; 
 
     // cpu
-    single_cycle_cpu_interrupt M0 (sys_clk, clrn, inst, d_f_mem, pc, mem_a, d_t_mem, wmem,rmem, 1'b0, 1'b0);
+    single_cycle_cpu_interrupt M0 (sys_clk, clrn, inst, d_f_mem, pc, mem_a, d_t_mem, wmem,rmem, time_interrupt, 1'b0);
 
     wire [31:0] d_t_vga;
     wire [6:0] d_f_vga;
