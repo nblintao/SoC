@@ -54,7 +54,7 @@ move_grid:
     lw      $a0,    0($sp)
     lw      $a1,    4($sp)
     lw      $ra,    8($sp)
-    addi    $sp,    $sp,    812
+    addi    $sp,    $sp,    12
 
     sw      $v0,    0($a1)
     sw      $v1,    4($a1)
