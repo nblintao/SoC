@@ -2,12 +2,14 @@
 
 main:
     addi    $sp,    $zero,  SP
-    addi    $sp,    $sp,    -16
+    addi    $sp,    $sp,    -20
     sw      $zero,  0($sp)          # row
     sw      $zero,  4($sp)          # column
     addi    $t0,    $zero,  50
     sw      $t0,    8($sp)          # speed: 50 counts / grid
     sw      $t0,    12($sp)         # count
+    addi    $t0,    $zero,  1
+    sw      $t0,    16($sp)         # direction: +1
 
     addi    $t0,    $zero,   BALL
     li      $t1,    VGA_A
@@ -40,17 +42,52 @@ move_grid:
     lw      $t0,    8($a1)      # speed
     sw      $t0,    12($a1)     # count = speed
 
+    lw      $t2,    0($a1)  # row
+    lw      $t3,    4($a1)  # column
+    lw      $t4,    16($a1) # direction
+
+# #   if column == 79 and direction(column) == 1:
+# #       direction(column) = - direction(column)
+#     addi    $t1,    $zero,  79
+#     bne     $t1,    $t3,    move_grid_or2
+#     slt     $t1,    $zero,  $t0     # direction > 0
+#     beq     $t1,    $zero,  move_grid_or2
+#     sub     $t0,    $zero,  $t0
+#     sw      $t0,    8($a1)
+#     j       move_grid_exit
+
+# #   elif column == 0 and direction(column) < 0 :
+# #       direction(column) = - direction(column)
+# move_grid_or2:
+#     addi    $t1,    $zero,  0
+#     bne     $t1,    $t3,    move_grid_real
+#     slt     $t1,    $zero,  $t0     # direction < 0
+#     beq     $t1,    $zero,  move_grid_or2
+#     sub     $t0,    $zero,  $t0
+#     sw      $t0,    8($a1)
+#     j       move_grid_exit
+    
+
+#   else:
+#       move!
+move_grid_real:
     addi    $sp,    $sp,    -12
     sw      $a0,    0($sp)
     sw      $a1,    4($sp)
     sw      $ra,    8($sp)
 
-    move    $t0,    $a1     # address of row, column data
+    #move    $t0,    $a1     # address of row, column data
+    move    $a0,    $t2     # row
+    move    $a1,    $t3     # column
 
-    lw      $a0,    0($t0)  # row
-    lw      $a1,    4($t0)  # column
+    slt     $t5,    $zero,  $t4     # speed > 0
+    beq     $t5,    $zero,  move_grid_left
     jal     move_right
+    j       move_grid_left_over
+move_grid_left:
+    jal     move_left
 
+move_grid_left_over:
     lw      $a0,    0($sp)
     lw      $a1,    4($sp)
     lw      $ra,    8($sp)
@@ -59,7 +96,7 @@ move_grid:
     sw      $v0,    0($a1)
     sw      $v1,    4($a1)
 
-
+move_grid_exit:
     jr      $ra
 
     
@@ -130,13 +167,30 @@ move_right:
     li      $t1,    VGA_A           # $t1 = $t0 + VGA_A
     add     $t1,    $t1,    $t0
     lw      $t2,    0($t1)          # $t2 = ascii
-#addi    $t2,$zero,BALL
-    sw      $t2,    SEG_A($zero)
-
     sw      $zero,  0($t1)          # clear the original position
     addi    $v0,    $a0,    0       # CHANGE! new row
     addi    $v1,    $a1,    1       # CHANGE! new column
     addi    $t1,    $t1,    4       # CHANGE! move position
+    sw      $t2,    0($t1)          # redraw
+    jr      $ra
+
+move_left:
+# $a0:  row
+# $a1:  column
+# $v0:  new row
+# $v1:  new column
+    sll     $t0,    $a0,    6       # $t0 = (char_row<<6) + (char_row<<4) + char_col
+    sll     $t1,    $a0,    4
+    add     $t0,    $t0,    $t1
+    add     $t0,    $t0,    $a1
+    sll     $t0,    $t0,    2
+    li      $t1,    VGA_A           # $t1 = $t0 + VGA_A
+    add     $t1,    $t1,    $t0
+    lw      $t2,    0($t1)          # $t2 = ascii
+    sw      $zero,  0($t1)          # clear the original position
+    addi    $v0,    $a0,    0       # CHANGE! new row
+    addi    $v1,    $a1,    -1      # CHANGE! new column
+    addi    $t1,    $t1,    -4      # CHANGE! move position
     sw      $t2,    0($t1)          # redraw
     jr      $ra
 
