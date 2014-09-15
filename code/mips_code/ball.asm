@@ -7,10 +7,9 @@ main:
 
 # bar
     addi    $sp,    $sp,    -8
-    # 0~79    38|39|40|41
-    addi    $t0,    $zero,  38
+    addi    $t0,    $zero,  30
     sw      $t0,    0($sp)
-    addi    $t0,    $zero,  41
+    addi    $t0,    $zero,  49
     sw      $t0,    4($sp)
 
     add     $a0,    $zero,  $sp
@@ -253,15 +252,17 @@ print_keybord:
 # $a1 : address of data
     addi    $sp,    $sp,    -4
     sw      $ra,    0($sp)
-    addi    $t0,    $zero,  F0_done     # $t0 = addr(F0_done)
-    lw      $t1,    0($t0)      # $t1 = F0_done
-    bne     $t1,    $zero,  print_keybord_f0before  # F0_done != 0
-    li      $t1,    0x000001F0
-    beq     $t1,    $a0,    print_keybord_thisf0    # $a0 == 0x00001f0
+    # addi    $t0,    $zero,  F0_done     # $t0 = addr(F0_done)
+    # lw      $t1,    0($t0)      # $t1 = F0_done
+    # bne     $t1,    $zero,  print_keybord_f0before  # F0_done != 0
+    # li      $t1,    0x000001F0
+    # beq     $t1,    $a0,    print_keybord_thisf0    # $a0 == 0x00001f0
     andi    $a0,    $a0,    0xFF    # $a0 = 0x0000_00XX
 
     addi    $t2,    $zero,  0x74
     beq     $t2,    $a0,    print_keybord_right
+    addi    $t2,    $zero,  0x6B
+    beq     $t2,    $a0,    print_keybord_left
     j       print_keybord_exit
 
 
@@ -276,6 +277,7 @@ print_keybord_right:
     sw      $t1,    4($a1)
     add     $a0,    $zero,  $a1
     jal     disp_bar
+    j       print_keybord_exit
 
     # addi    $sp,    $sp,    -8
     # sw      $a0,    0($sp)
@@ -294,15 +296,25 @@ print_keybord_right:
     # sw      $v0,    0($a1)
     # sw      $v1,    4($a1)
 
+    # j       print_keybord_exit
+
+print_keybord_left:
+    lw      $t0,    0($a1)
+    lw      $t1,    4($a1)
+    beq     $t0,    $zero,  print_keybord_exit
+    addi    $t0,    $t0,    -1
+    addi    $t1,    $t1,    -1
+    sw      $t0,    0($a1)
+    sw      $t1,    4($a1)
+    add     $a0,    $zero,  $a1
+    jal     disp_bar
     j       print_keybord_exit
 
-
-
-print_keybord_thisf0:
-    sw      $t1,    0($t0)      # F0_done = 0x00001f0
-    j print_keybord_exit
-print_keybord_f0before:
-    sw      $zero,  0($t0)      # F0_done = $zero
+# print_keybord_thisf0:
+#     sw      $t1,    0($t0)      # F0_done = 0x00001f0
+#     j print_keybord_exit
+# print_keybord_f0before:
+#     sw      $zero,  0($t0)      # F0_done = $zero
 print_keybord_exit:
     lw      $ra,    0($sp)
     addi    $sp,    $sp,    4    
