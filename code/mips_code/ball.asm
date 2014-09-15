@@ -7,24 +7,26 @@ main:
 
 # bar
     addi    $sp,    $sp,    -8
-    # 0~59    28|29|30|31
-    addi    $t0,    $zero,  28
+    # 0~79    38|39|40|41
+    addi    $t0,    $zero,  38
     sw      $t0,    0($sp)
-    addi    $t0,    $zero,  31
+    addi    $t0,    $zero,  41
     sw      $t0,    4($sp)
 
-    addi    $t0,    $zero,  28
-    addi    $t2,    $zero,  BAR    
+    add     $a0,    $zero,  $sp
+    jal     disp_bar
+#     addi    $t0,    $zero,  28
+#     addi    $t2,    $zero,  BAR    
     
-    li      $t3,    VGA_A
-    addi    $t3,    $t3,    18880   # 59 * 80 * 4 = 18880
-    addi    $t3,    $t3,    112     # 28 * 4 = 112
-bar_foo:
-    sw      $t2,    0($t3)    
-    addi    $t0,    $t0,    1
-    addi    $t3,    $t3,    4
-    slti    $t1,    $t0,    32
-    bne     $t1,    $zero,  bar_foo
+#     li      $t3,    VGA_A
+#     addi    $t3,    $t3,    18880   # 59 * 80 * 4 = 18880
+#     addi    $t3,    $t3,    152     # 38 * 4 = 152
+# bar_foo:
+#     sw      $t2,    0($t3)    
+#     addi    $t0,    $t0,    1
+#     addi    $t3,    $t3,    4
+#     slti    $t1,    $t0,    42
+#     bne     $t1,    $zero,  bar_foo
 
 # ball-1
     addi    $sp,    $sp,    -32
@@ -72,7 +74,7 @@ polling:
     andi    $t0,    $s0,    256
     beq     $t0,    $zero,  timer       # $s0[8] != ready
     move    $a0,    $s0
-    add     $a1,    $zero,  $sp         # save address of row, column, speed, count data    
+    addi    $a1,    $sp,    64          # save address of data
     jal     print_keybord
     # timer
 timer:
@@ -88,6 +90,7 @@ timer:
     jal     timer_step_h
     addi    $a1,    $sp,    32
     jal     timer_step_v
+
 timer_end:
     j       polling
 
@@ -247,7 +250,7 @@ move_grid_v_exit:
 
 print_keybord:
 # $a0 : data form keybord 0x0000_01XX
-# $a1 : address of row, column data
+# $a1 : address of data
     addi    $sp,    $sp,    -4
     sw      $ra,    0($sp)
     addi    $t0,    $zero,  F0_done     # $t0 = addr(F0_done)
@@ -263,22 +266,33 @@ print_keybord:
 
 
 print_keybord_right:
-    addi    $sp,    $sp,    -8
-    sw      $a0,    0($sp)
-    sw      $a1,    4($sp)
+    lw      $t0,    0($a1)
+    lw      $t1,    4($a1)
+    slti    $t2,    $t1,    79
+    beq     $t2,    $zero,  print_keybord_exit
+    addi    $t0,    $t0,    1
+    addi    $t1,    $t1,    1
+    sw      $t0,    0($a1)
+    sw      $t1,    4($a1)
+    add     $a0,    $zero,  $a1
+    jal     disp_bar
 
-    move    $t0,    $a1     # address of row, column data
+    # addi    $sp,    $sp,    -8
+    # sw      $a0,    0($sp)
+    # sw      $a1,    4($sp)
 
-    lw      $a0,    0($t0)  # row
-    lw      $a1,    4($t0)  # column
-    jal     move_right
+    # move    $t0,    $a1     # address of row, column data
 
-    lw      $a0,    0($sp)
-    lw      $a1,    4($sp)
-    addi    $sp,    $sp,    8
+    # lw      $a0,    0($t0)  # row
+    # lw      $a1,    4($t0)  # column
+    # jal     move_right
 
-    sw      $v0,    0($a1)
-    sw      $v1,    4($a1)
+    # lw      $a0,    0($sp)
+    # lw      $a1,    4($sp)
+    # addi    $sp,    $sp,    8
+
+    # sw      $v0,    0($a1)
+    # sw      $v1,    4($a1)
 
     j       print_keybord_exit
 
@@ -391,6 +405,53 @@ move_up:
     jr      $ra
 
 
+disp_bar:
+# $a0:  bar position address
+    lw      $t0,    0($a0)      # $t0 = bar left
+    lw      $t1,    4($a0)      # $t1 = bar right
+    li      $t2,    VGA_A
+    addi    $t2,    $t2,    18880   # 59 * 80 * 4 = 18880
+    addi    $t3,    $t2,    320     # 80 * 4 = 320
+    sll     $t0,    $t0,    2
+    sll     $t1,    $t1,    2
+    add     $t0,    $t0,    $t2
+    add     $t1,    $t1,    $t2
+    
+    # for:
+    #     if t2<t0:
+    #         t2 is blanck
+    #         back
+    #     elif t2<=t1:
+    #         t2 is BAR
+    #         back
+    #     elif t2<t3:
+    #         t2 is blanck
+    #     else end
+    # back： 
+    #         t2+=4
+    #         for
+disp_bar_for:
+    slt     $t4,    $t2,    $t0
+    beq     $t4,    $zero,  disp_bar_in
+    sw      $zero,  0($t2)
+    j       disp_bar_back
+disp_bar_in:
+    slt     $t4,    $t1,    $t2
+    bne     $t4,    $zero,  disp_bar_right
+    addi    $t4,    $zero,  BAR
+    sw      $t4,    0($t2)
+    j       disp_bar_back
+disp_bar_right:
+    slt     $t4,    $t2,    $t3
+    beq     $t4,    $zero,  disp_bar_end
+    sw      $zero,  0($t2)
+disp_bar_back:
+    addi    $t2,    $t2,    4
+    j       disp_bar_for
+disp_bar_end:
+    jr      $ra
+
+# 59*80
 
 end:
     j       end
@@ -415,7 +476,7 @@ SCAN_CODE_END:
 
 `define     SP          0x00001000
 `define     VGA_A       0xC0000000
-# `define     VGA_A       0x0000F000
+# `define     VGA_A       0x00000F00
 `define     PS2_A       0xA0000000
 `define     SEG_A       0x00007F10
 `define     CURSOR_ROW  0x00001000
