@@ -59,6 +59,7 @@ module top( input wire clk,
     wire [7:0] key_data; 
 
     // cpu
+    // single_cycle_cpu_interrupt M0 (sys_clk, clrn, inst, d_f_mem, pc, mem_a, d_t_mem, wmem,rmem, time_interrupt, 1'b0);
     single_cycle_cpu_interrupt M0 (sys_clk, clrn, inst, d_f_mem, pc, mem_a, d_t_mem, wmem,rmem, time_interrupt, 1'b0);
 
     wire [31:0] d_t_vga;
@@ -67,6 +68,7 @@ module top( input wire clk,
     wire [31:0] d_f_seg,d_t_seg;
     wire [31:0] rom_a,d_f_rom;
     wire [5:0]  ram_a;
+    // wire [8:0]  ram_a;
     wire [31:0] d_f_ram, d_t_ram;
 
     mio_bus MIO0(   clk, mem_a, d_t_mem, d_f_mem, wmem, rmem,
@@ -82,11 +84,15 @@ module top( input wire clk,
     mio_ps2 MIO2 (sys_clk,clrn,PS2KeyboardClk,PS2KeyboardData,io_rdn,key_data,ready,overflow);
 
     mio_seg MIO3 (clk, d_f_seg, d_t_seg, wseg, sw[1:0], clkdiv[18:17], seg, an);
-
+  
     mio_rom MIO4 (pc, inst, rom_a, d_f_rom);
 
     // single port ram -- width: 32,  depth: 64
     mio_ram MIO5 (~clk, wram, ram_a, d_t_ram, d_f_ram);
-
-
+    
+    // mio_ram MIO5 (clk, pc,inst, ram_a,d_f_ram,wram,d_t_ram);
+    // single port ram -- width: 32,  depth: 512
+    // mio_ram MIO5 (~clk, wram, ram_a, d_t_ram, d_f_ram);
+    // mio_ram MIO5 (~clk, wram, ram_a,    d_t_ram, d_f_ram,
+    //                clk, 0,    pc[10:2], ,       inst);
 endmodule

@@ -1,3 +1,4 @@
+`timescale 1ns / 1ps
 module single_cycle_cpu_interrupt (clock, resetn, inst, d_f_mem, pc, m_addr, d_t_mem, wmem, rmem,intr0, intr1);
     input  clock, resetn;  // clock and reset (active low)
     input  [31:0] inst;    // instruction from instruction memory

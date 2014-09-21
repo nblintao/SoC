@@ -1,5 +1,7 @@
 .text
 
+
+
 main:
 
     addi    $sp,    $zero,  SP
@@ -65,7 +67,7 @@ main:
     sw      $t0,    0($t1)
 
 
-polling:  
+polling:
 
     # keybord
     li      $t0,    PS2_A
@@ -81,14 +83,33 @@ timer:
     beq     $t0,    $zero,  timer_end
     sw      $zero,  TIMER($zero)
 
+    # addi    $a0,    $sp,    64
+    # jal     disp_bar
+
     addi    $a1,    $sp,    0
+
     jal     timer_step_h
+    # nop
+    # nop
+    # nop
+    addi    $a0,    $sp,    64
+    # nop
+    # nop
+    # nop
     addi    $a1,    $sp,    0
     jal     timer_step_v
     addi    $a1,    $sp,    32
     jal     timer_step_h
+    # nop
+    # nop
+    # nop
+    addi    $a0,    $sp,    64
+    # nop
+    # nop
+    # nop
     addi    $a1,    $sp,    32
     jal     timer_step_v
+
 
 timer_end:
     j       polling
@@ -172,6 +193,7 @@ move_grid_h_exit:
 ###       timer_step_v       ### 
 
 timer_step_v:
+# $a0 : address of bar data
 # $a1 : address of row, column, speed, count data
     lw      $t0,    24($a1)     # count
     beq     $t0,    $zero,  move_grid_v
@@ -193,6 +215,32 @@ move_grid_v:
     bne     $t4,    $zero,  move_grid_v_or2   # direction != 0
     addi    $t4,    $zero,  1
     sw      $t4,    28($a1)          # update direction
+    # if column >= left and column <=right:
+    #     width++
+    lw      $t5,    0($a0)      # left
+    lw      $t6,    4($a0)      # right
+    slt     $t7,    $t3,    $t5
+    bne     $t7,    $zero,  move_grid_v_wrong
+    slt     $t7,    $t6,    $t3
+    bne     $t7,    $zero,  move_grid_v_wrong
+    # move_grid_v_right >_<
+    addi    $t5,    $t5,    1
+    sw      $t5,    0($a0)
+    addi    $t6,    $t6,    -1
+    sw      $t6,    4($a0)
+    j       move_grid_v_exit
+
+
+move_grid_v_wrong:
+    # <_> 
+    # beq     $t5,    $zero,  move_grid_v_wrong_r
+    addi    $t5,    $t5,    -1
+    sw      $t5,    0($a0)
+# move_grid_v_wrong_r:
+    # slti    $t7,    $t6,    79
+    # beq     $t7,    $zero,  move_grid_v_exit    
+    addi    $t6,    $t6,    1
+    sw      $t6,    4($a0)
     j       move_grid_v_exit
 
 #   elif row == 0 and direction(row) == 1:
@@ -252,11 +300,13 @@ print_keybord:
 # $a1 : address of data
     addi    $sp,    $sp,    -4
     sw      $ra,    0($sp)
+
     # addi    $t0,    $zero,  F0_done     # $t0 = addr(F0_done)
     # lw      $t1,    0($t0)      # $t1 = F0_done
     # bne     $t1,    $zero,  print_keybord_f0before  # F0_done != 0
     # li      $t1,    0x000001F0
     # beq     $t1,    $a0,    print_keybord_thisf0    # $a0 == 0x00001f0
+
     andi    $a0,    $a0,    0xFF    # $a0 = 0x0000_00XX
 
     addi    $t2,    $zero,  0x74
@@ -487,6 +537,7 @@ SCAN_CODE:
 SCAN_CODE_END:
 
 `define     SP          0x00001000
+# `define     SP          0x00000800
 `define     VGA_A       0xC0000000
 # `define     VGA_A       0x00000F00
 `define     PS2_A       0xA0000000

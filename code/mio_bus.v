@@ -1,3 +1,4 @@
+`timescale 1ns / 1ps
 module mio_bus(
     input clk,
     input [31:0] mem_a,
@@ -24,6 +25,7 @@ module mio_bus(
     input   [31:0]  d_f_rom,
 
     output  [5:0]   ram_a,
+    // output  [8:0]   ram_a,
     input   [31:0]  d_f_ram,
     output  wram,
     output  [31:0]  d_t_ram
@@ -68,6 +70,12 @@ module mio_bus(
     assign ram_a = mem_a[7:2];
     assign wram = wmem & ram_space;
     assign d_t_ram = d_t_mem;
+
+    // wire ram_space = (mem_a[31:11] == 21'h0);
+    // assign ram_a = mem_a[10:2];
+    // assign wram = wmem & ram_space;
+    // assign d_t_ram = d_t_mem;
+
 
     //****************************************
     // cursor     space: 0000_1000 - 0000_1001

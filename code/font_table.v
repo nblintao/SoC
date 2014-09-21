@@ -1,3 +1,4 @@
+`timescale 1ns / 1ps
 module font_table (a,d);
     input  [12:0] a; // 8*8*128=2^3*2^3*2^7
     output        d; // font dot

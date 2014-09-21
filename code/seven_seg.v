@@ -1,3 +1,4 @@
+`timescale 1ns / 1ps
 module mio_seg(     input wire clk, // system clock
                     output [31:0] d_f_seg,
                     input [31:0] d_t_seg,

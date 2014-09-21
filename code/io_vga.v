@@ -1,3 +1,4 @@
+`timescale 1ns / 1ps
 module mio_vga(sys_clk,clrn,r,g,b,hs,vs,vga_clk,blankn,syncn,d_t_mem,cpu_mem_a,d_f_vga,wvram);
     input        sys_clk, clrn;     // sys_clk: 50MHz
     output [7:0] r, g, b;           // vga red,green,blue colors
@@ -24,7 +25,9 @@ module mio_vga(sys_clk,clrn,r,g,b,hs,vs,vga_clk,blankn,syncn,d_t_mem,cpu_mem_a,d
     wire   [9:0] col_addr;          // pixel ram col addr, 640 (1024) pixels
     wire         vga_rdn;           // in vgac, rd_a = {row[8:0],col[9:0]}
     // wire  [23:0] vga_pixel = font_dot? 24'hffffff : 24'h0000ff; //white/blue
-    wire  [23:0] vga_pixel = font_dot? 24'hffffff : 24'h000000; //white/black
+    // wire  [23:0] vga_pixel = font_dot? 24'hffffff : 24'h000000; //white/black
+    wire  [23:0] vga_pixel = (char_row == 59) ?(font_dot? 24'hffffff : 24'h000000): // green/black
+                                               (font_dot? 24'hffffff : 24'h000000); // white/black
 
     vgac vga_24 (vga_clk,clrn,vga_pixel,row_addr,col_addr,vga_rdn,
                  r,g,b,hs,vs);

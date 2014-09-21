@@ -1,3 +1,4 @@
+`timescale 1ns / 1ps
 /************************************************
   The Verilog HDL code example is from the book
   Computer Principles and Design in Verilog HDL
