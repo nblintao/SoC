@@ -83,9 +83,6 @@ timer:
     beq     $t0,    $zero,  timer_end
     sw      $zero,  TIMER($zero)
 
-    # addi    $a0,    $sp,    64
-    # jal     disp_bar
-
     addi    $a1,    $sp,    0
 
     jal     timer_step_h
@@ -109,9 +106,8 @@ timer:
     # nop
     addi    $a1,    $sp,    32
     jal     timer_step_v
-
-
 timer_end:
+
     j       polling
 
 
@@ -216,7 +212,7 @@ move_grid_v:
     addi    $t4,    $zero,  1
     sw      $t4,    28($a1)          # update direction
     # if column >= left and column <=right:
-    #     width++
+    #     width--
     lw      $t5,    0($a0)      # left
     lw      $t6,    4($a0)      # right
     slt     $t7,    $t3,    $t5
@@ -228,7 +224,7 @@ move_grid_v:
     sw      $t5,    0($a0)
     addi    $t6,    $t6,    -1
     sw      $t6,    4($a0)
-    j       move_grid_v_exit
+    j       move_grid_v_dispbar
 
 
 move_grid_v_wrong:
@@ -238,9 +234,15 @@ move_grid_v_wrong:
     sw      $t5,    0($a0)
 # move_grid_v_wrong_r:
     # slti    $t7,    $t6,    79
-    # beq     $t7,    $zero,  move_grid_v_exit    
+    # beq     $t7,    $zero,  move_grid_v_dispbar
     addi    $t6,    $t6,    1
     sw      $t6,    4($a0)
+move_grid_v_dispbar:
+    addi    $sp,    $sp,    -4
+    sw      $ra,    0($sp)
+    jal     disp_bar
+    lw      $ra,    0($sp)
+    addi    $sp,    $sp,    4
     j       move_grid_v_exit
 
 #   elif row == 0 and direction(row) == 1:

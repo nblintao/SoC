@@ -26,7 +26,7 @@ module mio_vga(sys_clk,clrn,r,g,b,hs,vs,vga_clk,blankn,syncn,d_t_mem,cpu_mem_a,d
     wire         vga_rdn;           // in vgac, rd_a = {row[8:0],col[9:0]}
     // wire  [23:0] vga_pixel = font_dot? 24'hffffff : 24'h0000ff; //white/blue
     // wire  [23:0] vga_pixel = font_dot? 24'hffffff : 24'h000000; //white/black
-    wire  [23:0] vga_pixel = (char_row == 59) ?(font_dot? 24'hffffff : 24'h000000): // green/black
+    wire  [23:0] vga_pixel = (char_row == 59) ?(font_dot? 24'hffff00 : 24'h000000): // green/black
                                                (font_dot? 24'hffffff : 24'h000000); // white/black
 
     vgac vga_24 (vga_clk,clrn,vga_pixel,row_addr,col_addr,vga_rdn,
