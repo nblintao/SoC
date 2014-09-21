@@ -86,24 +86,12 @@ timer:
     addi    $a1,    $sp,    0
 
     jal     timer_step_h
-    # nop
-    # nop
-    # nop
     addi    $a0,    $sp,    64
-    # nop
-    # nop
-    # nop
     addi    $a1,    $sp,    0
     jal     timer_step_v
     addi    $a1,    $sp,    32
     jal     timer_step_h
-    # nop
-    # nop
-    # nop
     addi    $a0,    $sp,    64
-    # nop
-    # nop
-    # nop
     addi    $a1,    $sp,    32
     jal     timer_step_v
 timer_end:
@@ -315,6 +303,18 @@ print_keybord:
     beq     $t2,    $a0,    print_keybord_right
     addi    $t2,    $zero,  0x6B
     beq     $t2,    $a0,    print_keybord_left
+    addi    $t2,    $zero,  0x4D                # P
+    beq     $t2,    $a0,    print_keybord_pause
+    j       print_keybord_exit
+
+print_keybord_pause:    
+    li      $t0,    PS2_A
+    lw      $t1,    0($t0)
+    andi    $t0,    $t1,    256
+    beq     $t0,    $zero,  print_keybord_pause
+    andi    $t1,    $t1,    0xFF 
+    addi    $t2,    $zero,  0x2D                # R
+    bne     $t2,    $t1,    print_keybord_pause
     j       print_keybord_exit
 
 
